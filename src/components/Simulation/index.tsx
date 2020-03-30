@@ -83,7 +83,7 @@ const Simulation: React.FunctionComponent = () => {
   const [lasts, setLasts] = useState(3);
   const [hygiene, setHygiene] = useState(1);
   const [showRemoved, setShowRemoved] = useState(false);
-  const [showPaths, setShowPaths] = useState(true);
+  const [showPaths, setShowPaths] = useState(false);
 
   const distance = (a: XY, b: XY): number => ((b[1] - a[1]) ** 2 + (b[0] - a[0]) ** 2) ** 0.5;
 
