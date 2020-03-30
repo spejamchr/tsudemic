@@ -5,9 +5,16 @@ import { maxR, maxX, maxY, Person } from "../Simulation";
 interface Props {
   people: Person[];
   range: number;
+  showRemoved: boolean;
+  showPaths: boolean;
 }
 
-const Display: React.FunctionComponent<Props> = ({ people, range }) => {
+const Display: React.FunctionComponent<Props> = ({
+  people,
+  range,
+  showRemoved,
+  showPaths
+}) => {
   return (
     <div
       style={{
@@ -27,7 +34,13 @@ const Display: React.FunctionComponent<Props> = ({ people, range }) => {
         }}
       >
         {people.map(person => (
-          <DrawPerson person={person} range={range} />
+          <DrawPerson
+            key={person.id}
+            person={person}
+            range={range}
+            showRemoved={showRemoved}
+            showPaths={showPaths}
+          />
         ))}
       </div>
     </div>

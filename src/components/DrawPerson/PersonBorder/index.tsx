@@ -20,8 +20,8 @@ const PersonBorder: React.FunctionComponent<Props> = ({
         <div
           style={{
             position: "absolute",
-            top: top - range,
-            left: left - range,
+            top: top - range - 1,
+            left: left - range - 1,
             width: `${2 * range}px`,
             height: `${2 * range}px`,
             borderRadius: `${range + 1}px`,

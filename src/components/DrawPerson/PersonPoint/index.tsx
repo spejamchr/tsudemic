@@ -1,42 +1,30 @@
 import React from "react";
 import { Person } from "../../Simulation";
+import SimplePoint from "./SimplePoint";
 
 interface Props {
   person: Person;
   top: number;
   left: number;
+  showRemoved: boolean;
 }
 
-const color = (person: Person): string => {
+const PersonPoint: React.FunctionComponent<Props> = ({
+  person,
+  top,
+  left,
+  showRemoved
+}) => {
   switch (person.kind) {
     case "susceptible":
-      return "green";
     case "infectious":
-      return "red";
+      return <SimplePoint person={person} top={top} left={left} />;
     case "removed":
-      return "gray";
-  }
-};
-
-const PersonPoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
-  switch (person.kind) {
-    case "susceptible":
-      return (
-        <div
-          style={{
-            position: "absolute",
-            top: top - 1,
-            left: left - 1,
-            width: "4px",
-            height: "4px",
-            borderRadius: `2px`,
-            backgroundColor: color(person)
-          }}
-        />
+      return showRemoved ? (
+        <SimplePoint person={person} top={top} left={left} />
+      ) : (
+        <></>
       );
-    case "infectious":
-    case "removed":
-      return <></>;
   }
 };
 

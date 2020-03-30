@@ -81,8 +81,10 @@ const Simulation: React.FunctionComponent = () => {
   const [people, setPeople] = useState([] as Person[]);
   const [population, setPopulation] = useState(100);
   const [range, setRange] = useState(10);
-  const [lasts, setLasts] = useState(10);
-  const [hygiene, setHygiene] = useState(4);
+  const [lasts, setLasts] = useState(3);
+  const [hygiene, setHygiene] = useState(2);
+  const [showRemoved, setShowRemoved] = useState(false);
+  const [showPaths, setShowPaths] = useState(true);
 
   const distance = (a: XY, b: XY): number =>
     ((b[1] - a[1]) ** 2 + (b[0] - a[0]) ** 2) ** 0.5;
@@ -154,7 +156,12 @@ const Simulation: React.FunctionComponent = () => {
     .map(date => (
       <>
         <Timer startedAt={date} stopped={infectious() === 0} />
-        <Display people={people} range={range} />
+        <Display
+          people={people}
+          range={range}
+          showRemoved={showRemoved}
+          showPaths={showPaths}
+        />
         <Data
           population={population}
           susceptible={susceptible()}
@@ -172,6 +179,10 @@ const Simulation: React.FunctionComponent = () => {
           setPopulation={setPopulation}
           hygiene={hygiene}
           setHygiene={setHygiene}
+          showRemoved={showRemoved}
+          setShowRemoved={setShowRemoved}
+          showPaths={showPaths}
+          setShowPaths={setShowPaths}
           start={startSimulation}
         />
       </>
@@ -186,6 +197,10 @@ const Simulation: React.FunctionComponent = () => {
         setPopulation={setPopulation}
         hygiene={hygiene}
         setHygiene={setHygiene}
+        showRemoved={showRemoved}
+        setShowRemoved={setShowRemoved}
+        showPaths={showPaths}
+        setShowPaths={setShowPaths}
         start={startSimulation}
       />
     ));

@@ -9,6 +9,10 @@ interface Props {
   setPopulation: (population: number) => void;
   hygiene: number;
   setHygiene: (hygiene: number) => void;
+  showRemoved: boolean;
+  setShowRemoved: (showRemoved: boolean) => void;
+  showPaths: boolean;
+  setShowPaths: (showPaths: boolean) => void;
   start: () => void;
 }
 
@@ -27,6 +31,10 @@ const Controls: React.FunctionComponent<Props> = ({
   setPopulation,
   hygiene,
   setHygiene,
+  showRemoved,
+  setShowRemoved,
+  showPaths,
+  setShowPaths,
   start
 }) => {
   return (
@@ -68,6 +76,26 @@ const Controls: React.FunctionComponent<Props> = ({
             type="text"
             value={hygiene}
             onChange={parseNumberAnd(setHygiene)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Show Paths?
+          <input
+            type="checkbox"
+            checked={showPaths}
+            onChange={e => setShowPaths(e.target.checked)}
+          />
+        </label>
+      </div>
+      <div>
+        <label>
+          Show Removed?
+          <input
+            type="checkbox"
+            checked={showRemoved}
+            onChange={e => setShowRemoved(e.target.checked)}
           />
         </label>
       </div>
