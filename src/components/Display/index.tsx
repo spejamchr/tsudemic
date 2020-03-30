@@ -19,17 +19,18 @@ const Display: React.FunctionComponent<Props> = ({
     <div
       style={{
         border: "solid",
-        height: `${maxY + 2 * (maxR + range)}px`,
-        width: `${maxX + 2 * (maxR + range)}px`,
+        height: `${maxY + 2 * maxR}px`,
+        width: `${maxX + 2 * maxR}px`,
         margin: "20px",
-        padding: "10px"
+        padding: "10px",
+        overflow: "hidden"
       }}
     >
       <div
         style={{
           height: `${maxY}px`,
           width: `${maxX}px`,
-          margin: `${maxR + range}px`,
+          margin: `${maxR}px`,
           position: "relative"
         }}
       >

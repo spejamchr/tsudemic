@@ -15,6 +15,10 @@ const Timer: React.FunctionComponent<Props> = ({ startedAt, stopped }) => {
     return () => clearInterval(interval);
   }, [startedAt, stopped]);
 
+  if (time.valueOf() < startedAt.valueOf()) {
+    return <div>0s</div>;
+  }
+
   return (
     <div>{((time.valueOf() - startedAt.valueOf()) / 1000).toFixed()}s</div>
   );

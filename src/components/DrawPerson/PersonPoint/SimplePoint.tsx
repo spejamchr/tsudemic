@@ -23,8 +23,8 @@ const SimplePoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
     <div
       style={{
         position: "absolute",
-        top: top - 2,
-        left: left - 2,
+        top: `${top - 2}px`,
+        left: `${left - 2}px`,
         width: "4px",
         height: "4px",
         borderRadius: `2px`,

@@ -1,5 +1,5 @@
 import { just, nothing } from "maybeasy";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
@@ -71,8 +71,8 @@ export const personPosition = (person: Person): XY => [
 ];
 
 export type Person = Susceptible | Infectious | Removed;
-export const maxX = 100;
-export const maxY = 100;
+export const maxX = 300;
+export const maxY = 300;
 export const minR = 10;
 export const maxR = 60;
 
@@ -82,7 +82,7 @@ const Simulation: React.FunctionComponent = () => {
   const [population, setPopulation] = useState(100);
   const [range, setRange] = useState(10);
   const [lasts, setLasts] = useState(3);
-  const [hygiene, setHygiene] = useState(2);
+  const [hygiene, setHygiene] = useState(1);
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(true);
 
@@ -152,24 +152,15 @@ const Simulation: React.FunctionComponent = () => {
   const infectious = () => onlyKind(people, "infectious").length;
   const removed = () => onlyKind(people, "removed").length;
 
-  return startedAt
-    .map(date => (
-      <>
-        <Timer startedAt={date} stopped={infectious() === 0} />
-        <Display
-          people={people}
-          range={range}
-          showRemoved={showRemoved}
-          showPaths={showPaths}
-        />
-        <Data
-          population={population}
-          susceptible={susceptible()}
-          infectious={infectious()}
-          removed={removed()}
-          lasts={lasts}
-          range={range}
-        />
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-around"
+      }}
+    >
+      <div>
         <Controls
           lasts={lasts}
           setLasts={setLasts}
@@ -185,25 +176,25 @@ const Simulation: React.FunctionComponent = () => {
           setShowPaths={setShowPaths}
           start={startSimulation}
         />
-      </>
-    ))
-    .getOrElse(() => (
-      <Controls
-        lasts={lasts}
-        setLasts={setLasts}
-        range={range}
-        setRange={setRange}
-        population={population}
-        setPopulation={setPopulation}
-        hygiene={hygiene}
-        setHygiene={setHygiene}
-        showRemoved={showRemoved}
-        setShowRemoved={setShowRemoved}
-        showPaths={showPaths}
-        setShowPaths={setShowPaths}
-        start={startSimulation}
-      />
-    ));
+        <Data
+          susceptible={susceptible()}
+          infectious={infectious()}
+          removed={removed()}
+        />
+      </div>
+      <div>
+        {startedAt
+          .map(date => <Timer startedAt={date} stopped={infectious() === 0} />)
+          .getOrElseValue(<div>0s</div>)}
+        <Display
+          people={people}
+          range={range}
+          showRemoved={showRemoved}
+          showPaths={showPaths}
+        />
+      </div>
+    </div>
+  );
 };
 
 export default Simulation;

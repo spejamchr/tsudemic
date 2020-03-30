@@ -10,8 +10,8 @@ const SimplePath: React.FunctionComponent<Props> = ({ x, y, r }) => (
   <div
     style={{
       position: "absolute",
-      top: y - r,
-      left: x - r,
+      top: `${y - r}px`,
+      left: `${x - r}px`,
       width: `${2 * r - 1}px`,
       height: `${2 * r - 1}px`,
       borderRadius: `${r}px`,
