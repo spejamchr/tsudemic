@@ -9,12 +9,7 @@ interface Props {
   showPaths: boolean;
 }
 
-const Display: React.FunctionComponent<Props> = ({
-  people,
-  range,
-  showRemoved,
-  showPaths
-}) => {
+const Display: React.FunctionComponent<Props> = ({ people, range, showRemoved, showPaths }) => {
   return (
     <div
       style={{
@@ -23,7 +18,7 @@ const Display: React.FunctionComponent<Props> = ({
         width: `${maxX + 2 * maxR}px`,
         margin: "20px",
         padding: "10px",
-        overflow: "hidden"
+        overflow: "hidden",
       }}
     >
       <div
@@ -31,10 +26,10 @@ const Display: React.FunctionComponent<Props> = ({
           height: `${maxY}px`,
           width: `${maxX}px`,
           margin: `${maxR}px`,
-          position: "relative"
+          position: "relative",
         }}
       >
-        {people.map(person => (
+        {people.map((person) => (
           <DrawPerson
             key={person.id}
             person={person}

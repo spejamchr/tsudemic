@@ -11,21 +11,11 @@ interface Props {
   showPaths: boolean;
 }
 
-const DrawPerson: React.FunctionComponent<Props> = ({
-  person,
-  range,
-  showRemoved,
-  showPaths
-}) => {
+const DrawPerson: React.FunctionComponent<Props> = ({ person, range, showRemoved, showPaths }) => {
   const [left, top] = personPosition(person);
   return (
     <>
-      <PersonPoint
-        person={person}
-        top={top}
-        left={left}
-        showRemoved={showRemoved}
-      />
+      <PersonPoint person={person} top={top} left={left} showRemoved={showRemoved} />
       <PersonBorder person={person} range={range} top={top} left={left} />
       {showPaths && <PersonPath person={person} showRemoved={showRemoved} />}
     </>

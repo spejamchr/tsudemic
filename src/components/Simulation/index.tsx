@@ -29,7 +29,7 @@ const susceptibleCons = (id: number): Susceptible => ({
   center: randXY(),
   radius: randRange(minR, maxR),
   angle: randRange(0, 2 * Math.PI),
-  speed: randRange(1, 5) * (Math.random() > 0.5 ? 1 : -1)
+  speed: randRange(1, 5) * (Math.random() > 0.5 ? 1 : -1),
 });
 
 interface Infectious extends PersonBase {
@@ -46,13 +46,13 @@ interface Removed extends PersonBase {
 const infectSusceptible = (person: Susceptible): Infectious => ({
   ...person,
   kind: "infectious",
-  infectedAt: new Date()
+  infectedAt: new Date(),
 });
 
 const removeInfectious = (person: Infectious): Removed => ({
   ...person,
   kind: "removed",
-  removedAt: new Date()
+  removedAt: new Date(),
 });
 
 const onlyKind = (people: Person[], type: Person["kind"]): Person[] => {
@@ -61,13 +61,12 @@ const onlyKind = (people: Person[], type: Person["kind"]): Person[] => {
 
 const move = (person: Person): Person => ({
   ...person,
-  angle:
-    (person.angle + person.speed / person.radius + Math.PI * 2) % (Math.PI * 2)
+  angle: (person.angle + person.speed / person.radius + Math.PI * 2) % (Math.PI * 2),
 });
 
 export const personPosition = (person: Person): XY => [
   person.radius * Math.cos(person.angle) + person.center[0],
-  person.radius * Math.sin(person.angle) + person.center[1]
+  person.radius * Math.sin(person.angle) + person.center[1],
 ];
 
 export type Person = Susceptible | Infectious | Removed;
@@ -86,8 +85,7 @@ const Simulation: React.FunctionComponent = () => {
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(true);
 
-  const distance = (a: XY, b: XY): number =>
-    ((b[1] - a[1]) ** 2 + (b[0] - a[0]) ** 2) ** 0.5;
+  const distance = (a: XY, b: XY): number => ((b[1] - a[1]) ** 2 + (b[0] - a[0]) ** 2) ** 0.5;
 
   const startSimulation = () => {
     let tmpPeople: Person[] = [];
@@ -116,22 +114,14 @@ const Simulation: React.FunctionComponent = () => {
               const position = personPosition(person);
 
               const chanceOfStayingHealthy = infectiousPeople
-                .map(other => distance(personPosition(other), position))
-                .filter(dist => dist <= range)
-                .reduce(
-                  (acc, dist) => acc * ((hygiene * dist) / range) ** 0.5,
-                  1
-                );
+                .map((other) => distance(personPosition(other), position))
+                .filter((dist) => dist <= range)
+                .reduce((acc, dist) => acc * ((hygiene * dist) / range) ** 0.5, 1);
 
-              return chanceOfStayingHealthy > Math.random()
-                ? person
-                : infectSusceptible(person);
+              return chanceOfStayingHealthy > Math.random() ? person : infectSusceptible(person);
             case "infectious":
-              const timeInfected =
-                new Date().valueOf() - person.infectedAt.valueOf();
-              return timeInfected >= lasts * 1000
-                ? removeInfectious(person)
-                : person;
+              const timeInfected = new Date().valueOf() - person.infectedAt.valueOf();
+              return timeInfected >= lasts * 1000 ? removeInfectious(person) : person;
             case "removed":
               return person;
             default:
@@ -157,7 +147,7 @@ const Simulation: React.FunctionComponent = () => {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "space-around"
+        justifyContent: "space-around",
       }}
     >
       <div>
@@ -176,22 +166,13 @@ const Simulation: React.FunctionComponent = () => {
           setShowPaths={setShowPaths}
           start={startSimulation}
         />
-        <Data
-          susceptible={susceptible()}
-          infectious={infectious()}
-          removed={removed()}
-        />
+        <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
       </div>
       <div>
         {startedAt
-          .map(date => <Timer startedAt={date} stopped={infectious() === 0} />)
+          .map((date) => <Timer startedAt={date} stopped={infectious() === 0} />)
           .getOrElseValue(<div>0s</div>)}
-        <Display
-          people={people}
-          range={range}
-          showRemoved={showRemoved}
-          showPaths={showPaths}
-        />
+        <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
     </div>
   );

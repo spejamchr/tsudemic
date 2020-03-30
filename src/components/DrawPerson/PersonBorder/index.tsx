@@ -8,12 +8,7 @@ interface Props {
   left: number;
 }
 
-const PersonBorder: React.FunctionComponent<Props> = ({
-  person,
-  range,
-  top,
-  left
-}) => {
+const PersonBorder: React.FunctionComponent<Props> = ({ person, range, top, left }) => {
   switch (person.kind) {
     case "infectious":
       return (
@@ -25,7 +20,7 @@ const PersonBorder: React.FunctionComponent<Props> = ({
             width: `${2 * range}px`,
             height: `${2 * range}px`,
             borderRadius: `${range + 1}px`,
-            border: `1px solid red`
+            border: `1px solid red`,
           }}
         />
       );

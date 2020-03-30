@@ -19,9 +19,7 @@ const Timer: React.FunctionComponent<Props> = ({ startedAt, stopped }) => {
     return <div>0s</div>;
   }
 
-  return (
-    <div>{((time.valueOf() - startedAt.valueOf()) / 1000).toFixed()}s</div>
-  );
+  return <div>{((time.valueOf() - startedAt.valueOf()) / 1000).toFixed()}s</div>;
 };
 
 export default Timer;

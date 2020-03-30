@@ -35,48 +35,32 @@ const Controls: React.FunctionComponent<Props> = ({
   setShowRemoved,
   showPaths,
   setShowPaths,
-  start
+  start,
 }) => {
   return (
     <div>
       <div>
         <label>
           Lasts
-          <input
-            type="text"
-            value={lasts}
-            onChange={parseNumberAnd(setLasts)}
-          />
+          <input type="text" value={lasts} onChange={parseNumberAnd(setLasts)} />
         </label>
       </div>
       <div>
         <label>
           Range
-          <input
-            type="text"
-            value={range}
-            onChange={parseNumberAnd(setRange)}
-          />
+          <input type="text" value={range} onChange={parseNumberAnd(setRange)} />
         </label>
       </div>
       <div>
         <label>
           Population
-          <input
-            type="text"
-            value={population}
-            onChange={parseNumberAnd(setPopulation)}
-          />
+          <input type="text" value={population} onChange={parseNumberAnd(setPopulation)} />
         </label>
       </div>
       <div>
         <label>
           Hygiene
-          <input
-            type="text"
-            value={hygiene}
-            onChange={parseNumberAnd(setHygiene)}
-          />
+          <input type="text" value={hygiene} onChange={parseNumberAnd(setHygiene)} />
         </label>
       </div>
       <div>
@@ -85,7 +69,7 @@ const Controls: React.FunctionComponent<Props> = ({
           <input
             type="checkbox"
             checked={showPaths}
-            onChange={e => setShowPaths(e.target.checked)}
+            onChange={(e) => setShowPaths(e.target.checked)}
           />
         </label>
       </div>
@@ -95,7 +79,7 @@ const Controls: React.FunctionComponent<Props> = ({
           <input
             type="checkbox"
             checked={showRemoved}
-            onChange={e => setShowRemoved(e.target.checked)}
+            onChange={(e) => setShowRemoved(e.target.checked)}
           />
         </label>
       </div>

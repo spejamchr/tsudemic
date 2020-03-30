@@ -6,11 +6,7 @@ interface Props {
   removed: number;
 }
 
-const Data: React.FunctionComponent<Props> = ({
-  susceptible,
-  infectious,
-  removed
-}) => {
+const Data: React.FunctionComponent<Props> = ({ susceptible, infectious, removed }) => {
   return (
     <ul>
       <li>susceptible: {susceptible}</li>

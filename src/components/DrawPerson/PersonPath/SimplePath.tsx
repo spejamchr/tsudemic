@@ -15,7 +15,7 @@ const SimplePath: React.FunctionComponent<Props> = ({ x, y, r }) => (
       width: `${2 * r - 1}px`,
       height: `${2 * r - 1}px`,
       borderRadius: `${r}px`,
-      border: `1px solid rgba(0,0,0,0.1)`
+      border: `1px solid rgba(0,0,0,0.1)`,
     }}
   />
 );

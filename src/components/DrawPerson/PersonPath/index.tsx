@@ -11,9 +11,9 @@ const PersonPath: React.FunctionComponent<Props> = ({
   person: {
     kind,
     center: [x, y],
-    radius: r
+    radius: r,
   },
-  showRemoved
+  showRemoved,
 }) => {
   switch (kind) {
     case "susceptible":

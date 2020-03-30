@@ -28,7 +28,7 @@ const SimplePoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
         width: "4px",
         height: "4px",
         borderRadius: `2px`,
-        backgroundColor: color(person)
+        backgroundColor: color(person),
       }}
     />
   );
