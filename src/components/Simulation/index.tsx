@@ -79,7 +79,7 @@ const Simulation: React.FunctionComponent = () => {
   const [startedAt, setStartedAt] = useState(nothing<Date>());
   const [people, setPeople] = useState([] as Person[]);
   const [population, setPopulation] = useState(100);
-  const [range, setRange] = useState(10);
+  const [range, setRange] = useState(15);
   const [lasts, setLasts] = useState(3);
   const [hygiene, setHygiene] = useState(1);
   const [showRemoved, setShowRemoved] = useState(false);
@@ -114,8 +114,8 @@ const Simulation: React.FunctionComponent = () => {
               const position = personPosition(person);
 
               const chanceOfStayingHealthy = infectiousPeople
-                .map((other) => distance(personPosition(other), position))
-                .filter((dist) => dist <= range)
+                .map(other => distance(personPosition(other), position))
+                .filter(dist => dist <= range)
                 .reduce((acc, dist) => acc * ((hygiene * dist) / range) ** 0.5, 1);
 
               return chanceOfStayingHealthy > Math.random() ? person : infectSusceptible(person);
@@ -169,9 +169,7 @@ const Simulation: React.FunctionComponent = () => {
         <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
       </div>
       <div>
-        {startedAt
-          .map((date) => <Timer startedAt={date} stopped={infectious() === 0} />)
-          .getOrElseValue(<div>0s</div>)}
+        <Timer startedAt={startedAt} stopped={infectious() === 0} />
         <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
     </div>

@@ -1,7 +1,9 @@
+import { Typography } from "@material-ui/core";
+import { Maybe } from "maybeasy";
 import React, { useEffect, useState } from "react";
 
 interface Props {
-  startedAt: Date;
+  startedAt: Maybe<Date>;
   stopped: boolean;
 }
 
@@ -15,11 +17,11 @@ const Timer: React.FunctionComponent<Props> = ({ startedAt, stopped }) => {
     return () => clearInterval(interval);
   }, [startedAt, stopped]);
 
-  if (time.valueOf() < startedAt.valueOf()) {
-    return <div>0s</div>;
-  }
+  const seconds = startedAt
+    .map(date => (date.valueOf() > time.valueOf() ? 0 : (time.valueOf() - date.valueOf()) / 1000))
+    .getOrElseValue(0);
 
-  return <div>{((time.valueOf() - startedAt.valueOf()) / 1000).toFixed()}s</div>;
+  return <Typography gutterBottom>Runtime: {seconds.toFixed()}s</Typography>;
 };
 
 export default Timer;

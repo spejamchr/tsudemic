@@ -1,9 +1,14 @@
+import CssBaseline from "@material-ui/core/CssBaseline";
 import React from "react";
-import "./App.css";
-import Simulation from "./components/Simulation";
+import AppBody from "./components/AppBody";
 
 const App = () => {
-  return <Simulation />;
+  return (
+    <>
+      <CssBaseline />
+      <AppBody />
+    </>
+  );
 };
 
 export default App;

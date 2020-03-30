@@ -1,5 +1,6 @@
 import React from "react";
 import { Person } from "../../Simulation";
+import { useTheme, Theme } from "@material-ui/core/styles";
 
 interface Props {
   person: Person;
@@ -7,18 +8,19 @@ interface Props {
   left: number;
 }
 
-const color = (person: Person): string => {
+const color = (theme: Theme, person: Person): string => {
   switch (person.kind) {
     case "susceptible":
-      return "green";
+      return theme.palette.primary.main;
     case "infectious":
-      return "red";
+      return theme.palette.secondary.main;
     case "removed":
-      return "gray";
+      return theme.palette.grey[400];
   }
 };
 
 const SimplePoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
+  const theme = useTheme();
   return (
     <div
       style={{
@@ -28,7 +30,7 @@ const SimplePoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
         width: "4px",
         height: "4px",
         borderRadius: `2px`,
-        backgroundColor: color(person),
+        backgroundColor: color(theme, person),
       }}
     />
   );
