@@ -68,7 +68,7 @@ const Controls: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
         <Typography id="range-slider" gutterBottom>
-          Infectious Range: {range}px
+          Infectious Range: {range}
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs>

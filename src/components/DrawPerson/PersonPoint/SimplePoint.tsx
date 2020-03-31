@@ -21,19 +21,7 @@ const color = (theme: Theme, person: Person): string => {
 
 const SimplePoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
   const theme = useTheme();
-  return (
-    <div
-      style={{
-        position: "absolute",
-        top: `${top - 2}px`,
-        left: `${left - 2}px`,
-        width: "3px",
-        height: "3px",
-        borderRadius: `2px`,
-        backgroundColor: color(theme, person),
-      }}
-    />
-  );
+  return <circle cx={left} cy={top} r={2} fill={color(theme, person)} />;
 };
 
 export default SimplePoint;

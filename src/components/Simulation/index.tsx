@@ -9,7 +9,7 @@ type XY = [number, number];
 
 const randRange = (a: number, b: number): number => a + Math.random() * (b - a);
 
-const randXY = (): XY => [randRange(0, maxX), randRange(0, maxY)];
+const randXY = (): XY => [randRange(0, maxXY), randRange(0, maxXY)];
 
 interface PersonBase {
   id: number;
@@ -70,8 +70,7 @@ export const personPosition = (person: Person): XY => [
 ];
 
 export type Person = Susceptible | Infectious | Removed;
-export const maxX = 300;
-export const maxY = 300;
+export const maxXY = 300;
 export const minR = 10;
 export const maxR = 60;
 
