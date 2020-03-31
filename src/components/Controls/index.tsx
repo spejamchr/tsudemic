@@ -1,13 +1,12 @@
 import {
+  Button,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
   Grid,
   Slider,
-  Typography,
-  FormControl,
-  FormLabel,
-  FormGroup,
-  FormControlLabel,
   Switch,
-  Button,
+  Typography,
 } from "@material-ui/core";
 import React from "react";
 

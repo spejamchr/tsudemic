@@ -166,12 +166,10 @@ const Simulation: React.FunctionComponent = () => {
           setShowPaths={setShowPaths}
           start={startSimulation}
         />
+        <Timer startedAt={startedAt} stopped={infectious() === 0} />
         <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
       </div>
-      <div>
-        <Timer startedAt={startedAt} stopped={infectious() === 0} />
-        <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
-      </div>
+      <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
     </div>
   );
 };
