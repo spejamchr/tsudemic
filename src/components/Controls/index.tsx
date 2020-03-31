@@ -130,10 +130,10 @@ const Controls: React.FunctionComponent<Props> = ({
           }
           label="Show Removed?"
         />
+        <Button variant="contained" color="primary" onClick={start}>
+          Start
+        </Button>
       </FormGroup>
-      <Button variant="contained" color="primary" onClick={start}>
-        Start
-      </Button>
     </FormControl>
   );
 };

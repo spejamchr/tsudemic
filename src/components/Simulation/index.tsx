@@ -4,6 +4,7 @@ import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
 import Timer from "../Timer";
+import { List } from "@material-ui/core";
 
 type XY = [number, number];
 
@@ -165,8 +166,10 @@ const Simulation: React.FunctionComponent = () => {
           setShowPaths={setShowPaths}
           start={startSimulation}
         />
-        <Timer startedAt={startedAt} stopped={infectious() === 0} />
-        <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
+        <List>
+          <Timer startedAt={startedAt} stopped={infectious() === 0} />
+          <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
+        </List>
       </div>
       <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
     </div>
