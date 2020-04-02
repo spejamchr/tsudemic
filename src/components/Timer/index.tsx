@@ -1,4 +1,4 @@
-import { Typography, List, ListItem, ListItemText } from "@material-ui/core";
+import { ListItem, ListItemText } from "@material-ui/core";
 import { Maybe } from "maybeasy";
 import React, { useEffect, useState } from "react";
 

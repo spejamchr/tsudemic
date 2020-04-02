@@ -1,10 +1,11 @@
+import { List } from "@material-ui/core";
 import { just, nothing } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
+import Graph from "../Graph";
 import Timer from "../Timer";
-import { List } from "@material-ui/core";
 
 type XY = [number, number];
 
@@ -56,7 +57,7 @@ const removeInfectious = (person: Infectious): Removed => ({
   removedAt: new Date(),
 });
 
-const onlyKind = (people: Person[], type: Person["kind"]): Person[] => {
+export const onlyKind = (people: Person[], type: Person["kind"]): Person[] => {
   return people.filter(({ kind }) => kind === type);
 };
 
@@ -150,7 +151,7 @@ const Simulation: React.FunctionComponent = () => {
         justifyContent: "space-around",
       }}
     >
-      <div>
+      <div style={{ minWidth: "250px" }}>
         <Controls
           lasts={lasts}
           setLasts={setLasts}
@@ -171,7 +172,10 @@ const Simulation: React.FunctionComponent = () => {
           <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
         </List>
       </div>
-      <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
+      <Graph people={people} startedAt={startedAt} stopped={infectious() === 0} />
+      <div style={{ flexGrow: 0.5, minWidth: "250px" }}>
+        <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
+      </div>
     </div>
   );
 };

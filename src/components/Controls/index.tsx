@@ -51,7 +51,7 @@ const Controls: React.FunctionComponent<Props> = ({
   start,
 }) => {
   return (
-    <FormControl component="fieldset" style={{ width: "300px" }}>
+    <FormControl component="fieldset" style={{ width: "100%" }}>
       <FormGroup>
         <Typography id="lasts-slider" gutterBottom>
           Infectious Period: {lasts}s
