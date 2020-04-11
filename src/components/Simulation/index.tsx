@@ -36,25 +36,25 @@ const susceptibleCons = (id: number): Susceptible => ({
 
 interface Infectious extends PersonBase {
   kind: "infectious";
-  infectedAt: Date;
+  infectedAt: number;
 }
 
 interface Removed extends PersonBase {
   kind: "removed";
-  infectedAt: Date;
-  removedAt: Date;
+  infectedAt: number;
+  removedAt: number;
 }
 
 const infectSusceptible = (person: Susceptible): Infectious => ({
   ...person,
   kind: "infectious",
-  infectedAt: new Date(),
+  infectedAt: new Date().valueOf(),
 });
 
 const removeInfectious = (person: Infectious): Removed => ({
   ...person,
   kind: "removed",
-  removedAt: new Date(),
+  removedAt: new Date().valueOf(),
 });
 
 export const onlyKind = (people: Person[], type: Person["kind"]): Person[] => {
@@ -77,7 +77,7 @@ export const minR = 10;
 export const maxR = 60;
 
 const Simulation: React.FunctionComponent = () => {
-  const [startedAt, setStartedAt] = useState(nothing<Date>());
+  const [startedAt, setStartedAt] = useState(nothing<number>());
   const [people, setPeople] = useState([] as Person[]);
   const [population, setPopulation] = useState(100);
   const [range, setRange] = useState(15);
@@ -98,12 +98,13 @@ const Simulation: React.FunctionComponent = () => {
       tmpPeople.push(person);
     }
     setPeople(tmpPeople);
-    setStartedAt(just(new Date()));
+    setStartedAt(just(new Date().valueOf()));
   };
 
   useEffect(() => {
     const tick = (): void => {
       const infectiousPeople = onlyKind(people, "infectious");
+      const timeNow = new Date().valueOf();
       if (infectiousPeople.length === 0) {
         return;
       }
@@ -121,7 +122,7 @@ const Simulation: React.FunctionComponent = () => {
 
               return chanceOfStayingHealthy > Math.random() ? person : infectSusceptible(person);
             case "infectious":
-              const timeInfected = new Date().valueOf() - person.infectedAt.valueOf();
+              const timeInfected = timeNow - person.infectedAt;
               return timeInfected >= lasts * 1000 ? removeInfectious(person) : person;
             case "removed":
               return person;
@@ -151,7 +152,7 @@ const Simulation: React.FunctionComponent = () => {
         justifyContent: "space-around",
       }}
     >
-      <div style={{ minWidth: "250px" }}>
+      <div style={{ minWidth: "250px", margin: "20px" }}>
         <Controls
           lasts={lasts}
           setLasts={setLasts}
@@ -172,8 +173,8 @@ const Simulation: React.FunctionComponent = () => {
           <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
         </List>
       </div>
-      <Graph people={people} startedAt={startedAt} stopped={infectious() === 0} />
-      <div style={{ flexGrow: 0.5, minWidth: "250px" }}>
+      <Graph people={people} startedAt={startedAt} />
+      <div style={{ flexGrow: 0.5, minWidth: "250px", margin: "20px" }}>
         <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
     </div>

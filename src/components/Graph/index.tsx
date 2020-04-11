@@ -1,48 +1,59 @@
 import { useTheme } from "@material-ui/core";
 import { Maybe } from "maybeasy";
 import React, { useEffect, useState } from "react";
+import * as Victory from "victory";
 import { onlyKind, Person } from "../Simulation";
 
 interface Props {
   people: Person[];
-  startedAt: Maybe<Date>;
-  stopped: boolean;
+  startedAt: Maybe<number>;
 }
 
-const Graph: React.FunctionComponent<Props> = ({ people, startedAt, stopped }) => {
+const Graph: React.FunctionComponent<Props> = ({ people, startedAt }) => {
   const theme = useTheme();
 
   const [sucs, setSucs] = useState([] as number[]);
   const [infs, setInfs] = useState([] as number[]);
   const [rems, setRems] = useState([] as number[]);
-  const [times, setTimes] = useState([] as Date[]);
-  const [hasStopped, setHasStopped] = useState(false);
+  const [times, setTimes] = useState([] as number[]);
 
   useEffect(() => {
-    if (stopped && !hasStopped) {
-      setHasStopped(true);
-    } else if (hasStopped && !stopped) {
-      setHasStopped(false);
-      setSucs([]);
-      setInfs([]);
-      setRems([]);
-      setTimes([]);
-    }
-    setSucs(s => s.concat(onlyKind(people, "susceptible").length).slice(-250));
-    setInfs(i => i.concat(onlyKind(people, "infectious").length).slice(-250));
-    setRems(r => r.concat(onlyKind(people, "removed").length).slice(-250));
-    setTimes(t => t.concat(new Date()));
-  }, [people, stopped, hasStopped]);
+    setSucs([]);
+    setInfs([]);
+    setRems([]);
+    setTimes([]);
+  }, [startedAt]);
 
-  const pop = people.length;
+  useEffect(() => {
+    const timeNow = new Date().valueOf();
+    if (times.length > 0 && timeNow - times.slice(-1)[0] < 150) {
+      return;
+    }
+    startedAt.do(() => {
+      setSucs(s => s.concat(onlyKind(people, "susceptible").length));
+      setInfs(i => i.concat(onlyKind(people, "infectious").length));
+      setRems(r => r.concat(onlyKind(people, "removed").length));
+      setTimes(t => t.concat(timeNow));
+    });
+  }, [people, times, startedAt]);
+
+  const xyData = (sir: number[]): { x: number; y: number }[] =>
+    startedAt
+      .map(t =>
+        sir.map((s, n) => ({
+          x: (times[n] - t) / 1000,
+          y: s,
+        }))
+      )
+      .getOrElseValue([]);
 
   return (
     <div
       style={{
         border: `solid 2px ${theme.palette.primary.main}`,
         height: "250px",
-        overflow: "hidden",
         width: "250px",
+        margin: "20px",
       }}
     >
       <div
@@ -52,33 +63,20 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, stopped }) =
           height: "100%",
         }}
       >
-        {sucs
-          .map((s, n) => [s, infs[n], rems[n], times[n]] as [number, number, number, Date])
-          .map(([s, i, r, t]) => (
-            <div key={t.valueOf()} style={{ height: "100%" }}>
-              <div
-                style={{
-                  height: `${(s / pop) * 100}%`,
-                  width: 1,
-                  background: theme.palette.success.main,
-                }}
-              />
-              <div
-                style={{
-                  height: `${(i / pop) * 100}%`,
-                  width: 1,
-                  background: theme.palette.error.main,
-                }}
-              />
-              <div
-                style={{
-                  height: `${(r / pop) * 100}%`,
-                  width: 1,
-                  background: theme.palette.grey[400],
-                }}
-              />
-            </div>
-          ))}
+        <Victory.VictoryChart theme={Victory.VictoryTheme.material}>
+          <Victory.VictoryLine
+            style={{ data: { stroke: theme.palette.primary.main } }}
+            data={xyData(sucs)}
+          />
+          <Victory.VictoryLine
+            style={{ data: { stroke: theme.palette.error.main } }}
+            data={xyData(infs)}
+          />
+          <Victory.VictoryLine
+            style={{ data: { stroke: theme.palette.grey[400] } }}
+            data={xyData(rems)}
+          />
+        </Victory.VictoryChart>
       </div>
     </div>
   );
