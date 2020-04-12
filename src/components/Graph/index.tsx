@@ -85,16 +85,34 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
     );
   };
 
+  const vTheme = Victory.VictoryTheme.material;
+  if (vTheme.axis && vTheme.axis.style) {
+    if (vTheme.axis.style.tickLabels) {
+      vTheme.axis.style.tickLabels.fill = theme.palette.text.primary;
+    }
+    if (vTheme.axis.style.ticks) {
+      vTheme.axis.style.ticks = undefined;
+    }
+    if (vTheme.axis.style.axis) {
+      vTheme.axis.style.axis.stroke = theme.palette.text.hint;
+    }
+    if (vTheme.axis.style.grid) {
+      vTheme.axis.style.grid.fill = "transparent";
+      vTheme.axis.style.grid.stroke = theme.palette.text.hint;
+      vTheme.axis.style.grid.strokeDasharray = undefined;
+    }
+  }
+
   return (
     <div style={{ width: "300px" }}>
       <div style={{ margin: "20px", border: `solid 2px ${theme.palette.primary.main}` }}>
-        <Victory.VictoryChart theme={Victory.VictoryTheme.material}>
+        <Victory.VictoryChart theme={vTheme}>
           <Victory.VictoryLine
             style={{ data: { stroke: theme.palette.primary.main } }}
             data={xyData(sucs)}
           />
           <Victory.VictoryLine
-            style={{ data: { stroke: theme.palette.error.main } }}
+            style={{ data: { stroke: theme.palette.secondary.main } }}
             data={xyData(infs)}
           />
           <Victory.VictoryLine
@@ -104,13 +122,13 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
         </Victory.VictoryChart>
       </div>
       <div style={{ margin: "20px", border: `solid 2px ${theme.palette.primary.main}` }}>
-        <Victory.VictoryChart theme={Victory.VictoryTheme.material}>
+        <Victory.VictoryChart theme={vTheme}>
           <Victory.VictoryLine
-            style={{ data: { stroke: theme.palette.error.main } }}
+            style={{ data: { stroke: theme.palette.secondary.main } }}
             data={xyData(rFac)}
           />
           <Victory.VictoryLine
-            style={{ data: { stroke: theme.palette.grey[400] } }}
+            style={{ data: { stroke: theme.palette.primary.main } }}
             data={xyData(hFac)}
           />
         </Victory.VictoryChart>

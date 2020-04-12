@@ -1,3 +1,4 @@
+import { useTheme } from "@material-ui/core";
 import React from "react";
 import { Person } from "../../Simulation";
 import SimplePath from "./SimplePath";
@@ -15,12 +16,14 @@ const PersonPath: React.FunctionComponent<Props> = ({
   },
   showRemoved,
 }) => {
+  const theme = useTheme();
+
   switch (kind) {
     case "susceptible":
     case "infectious":
-      return <SimplePath x={x} y={y} r={r} />;
+      return <SimplePath x={x} y={y} r={r} color={theme.palette.grey[800]} />;
     case "removed":
-      return showRemoved ? <SimplePath x={x} y={y} r={r} /> : <></>;
+      return showRemoved ? <SimplePath x={x} y={y} r={r} color={theme.palette.grey[800]} /> : <></>;
   }
 };
 

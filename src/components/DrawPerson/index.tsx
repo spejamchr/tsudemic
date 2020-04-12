@@ -15,9 +15,9 @@ const DrawPerson: React.FunctionComponent<Props> = ({ person, range, showRemoved
   const { x, y } = personPosition(person);
   return (
     <>
+      {showPaths && <PersonPath person={person} showRemoved={showRemoved} />}
       <PersonPoint person={person} top={y} left={x} showRemoved={showRemoved} />
       <PersonBorder person={person} range={range} top={y} left={x} />
-      {showPaths && <PersonPath person={person} showRemoved={showRemoved} />}
     </>
   );
 };
