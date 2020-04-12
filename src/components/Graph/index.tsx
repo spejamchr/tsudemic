@@ -86,28 +86,42 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
     );
   };
 
-  const vTheme = Victory.VictoryTheme.material;
-  if (vTheme.axis && vTheme.axis.style) {
-    if (vTheme.axis.style.tickLabels) {
-      vTheme.axis.style.tickLabels.fill = theme.palette.text.primary;
-    }
-    if (vTheme.axis.style.ticks) {
-      vTheme.axis.style.ticks = undefined;
-    }
-    if (vTheme.axis.style.axis) {
-      vTheme.axis.style.axis.stroke = theme.palette.text.hint;
-    }
-    if (vTheme.axis.style.grid) {
-      vTheme.axis.style.grid.fill = "transparent";
-      vTheme.axis.style.grid.stroke = theme.palette.text.hint;
-      vTheme.axis.style.grid.strokeDasharray = undefined;
-    }
-  }
+  const labelStyles = {
+    fontFamily: theme.typography.fontFamily,
+    fontSize: theme.typography.fontSize,
+    padding: 8,
+    fill: theme.palette.text.primary,
+  };
+
+  const vTheme = {
+    chart: { width: 350, height: 350 },
+    axis: {
+      style: {
+        tickLabels: labelStyles,
+        axis: { stroke: theme.palette.text.hint },
+        grid: { stroke: theme.palette.text.hint },
+      },
+    },
+    legend: {
+      orientation: "horizontal" as "horizontal",
+      style: { labels: labelStyles },
+      x: 60,
+      y: 10,
+      gutter: 20,
+    },
+  };
 
   return (
     <>
       <RatioContainer ratio={100}>
         <Victory.VictoryChart theme={vTheme}>
+          <Victory.VictoryLegend
+            data={[
+              { name: "Susc.", symbol: { fill: theme.palette.primary.main } },
+              { name: "Inf.", symbol: { fill: theme.palette.secondary.main } },
+              { name: "Rem.", symbol: { fill: theme.palette.grey[400] } },
+            ]}
+          />
           <Victory.VictoryLine
             style={{ data: { stroke: theme.palette.primary.main } }}
             data={xyData(sucs)}
@@ -124,6 +138,12 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
       </RatioContainer>
       <RatioContainer ratio={100}>
         <Victory.VictoryChart theme={vTheme}>
+          <Victory.VictoryLegend
+            data={[
+              { name: "R-Current", symbol: { fill: theme.palette.secondary.main } },
+              { name: "R-Historical", symbol: { fill: theme.palette.primary.main } },
+            ]}
+          />
           <Victory.VictoryLine
             style={{ data: { stroke: theme.palette.secondary.main } }}
             data={xyData(rFac)}
