@@ -1,4 +1,4 @@
-import { List } from "@material-ui/core";
+import { Button, List } from "@material-ui/core";
 import { just, nothing } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import Controls from "../Controls";
@@ -95,6 +95,12 @@ const Simulation: React.FunctionComponent = () => {
   const [showPaths, setShowPaths] = useState(false);
 
   const distance = (a: XY, b: XY): number => ((b.x - a.x) ** 2 + (b.y - a.y) ** 2) ** 0.5;
+
+  const stopSimulation = () => {
+    intervalInt.do(clearInterval);
+    setStartedAt(nothing());
+    setPeople([]);
+  };
 
   const startSimulation = () => {
     intervalInt.do(clearInterval);
@@ -216,6 +222,18 @@ const Simulation: React.FunctionComponent = () => {
           <Timer startedAt={startedAt} stopped={infectious() === 0} />
           <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
         </List>
+        {startedAt
+          .map(() => (
+            <Button
+              style={{ width: "100%" }}
+              variant="contained"
+              color="secondary"
+              onClick={stopSimulation}
+            >
+              Clear
+            </Button>
+          ))
+          .getOrElseValue(<></>)}
       </div>
       <Graph people={people} startedAt={startedAt} lasts={lasts} />
       <div style={{ flexGrow: 0.5, minWidth: "300px", margin: "20px" }}>
