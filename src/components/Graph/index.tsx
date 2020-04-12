@@ -86,7 +86,7 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
   };
 
   return (
-    <div style={{ width: "250px" }}>
+    <div style={{ width: "300px" }}>
       <div style={{ margin: "20px", border: `solid 2px ${theme.palette.primary.main}` }}>
         <Victory.VictoryChart theme={Victory.VictoryTheme.material}>
           <Victory.VictoryLine

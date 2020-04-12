@@ -189,7 +189,7 @@ const Simulation: React.FunctionComponent = () => {
         </List>
       </div>
       <Graph people={people} startedAt={startedAt} lasts={lasts} />
-      <div style={{ flexGrow: 0.5, minWidth: "250px", margin: "20px" }}>
+      <div style={{ flexGrow: 0.5, minWidth: "300px", margin: "20px" }}>
         <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
     </div>
