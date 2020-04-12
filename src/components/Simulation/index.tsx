@@ -21,7 +21,7 @@ interface PersonBase {
   speed: number;
 }
 
-interface Susceptible extends PersonBase {
+export interface Susceptible extends PersonBase {
   kind: "susceptible";
 }
 
@@ -34,21 +34,24 @@ const susceptibleCons = (id: number): Susceptible => ({
   speed: randRange(1, 5) * (Math.random() > 0.5 ? 1 : -1),
 });
 
-interface Infectious extends PersonBase {
+export interface Infectious extends PersonBase {
   kind: "infectious";
   infectedAt: number;
+  infectedCount: number;
 }
 
-interface Removed extends PersonBase {
+export interface Removed extends PersonBase {
   kind: "removed";
   infectedAt: number;
   removedAt: number;
+  infectedCount: number;
 }
 
 const infectSusceptible = (person: Susceptible): Infectious => ({
   ...person,
   kind: "infectious",
   infectedAt: new Date().valueOf(),
+  infectedCount: 0,
 });
 
 const removeInfectious = (person: Infectious): Removed => ({
@@ -57,9 +60,9 @@ const removeInfectious = (person: Infectious): Removed => ({
   removedAt: new Date().valueOf(),
 });
 
-export const onlyKind = (people: Person[], type: Person["kind"]): Person[] => {
-  return people.filter(({ kind }) => kind === type);
-};
+export function onlyKind<A extends Person>(people: Person[], type: A["kind"]): A[] {
+  return people.filter(({ kind }) => kind === type) as A[];
+}
 
 const move = (person: Person): Person => ({
   ...person,
@@ -103,7 +106,7 @@ const Simulation: React.FunctionComponent = () => {
 
   useEffect(() => {
     const tick = (): void => {
-      const infectiousPeople = onlyKind(people, "infectious");
+      const infectiousPeople = onlyKind<Infectious>(people, "infectious");
       const timeNow = new Date().valueOf();
       if (infectiousPeople.length === 0) {
         return;
@@ -115,12 +118,24 @@ const Simulation: React.FunctionComponent = () => {
             case "susceptible":
               const position = personPosition(person);
 
-              const chanceOfStayingHealthy = infectiousPeople
-                .map(other => distance(personPosition(other), position))
-                .filter(dist => dist <= range)
-                .reduce((acc, dist) => acc * ((hygiene * dist) / range) ** 0.5, 1);
+              const infectiousPeopleInRange = infectiousPeople
+                .map<[Infectious, number]>(person => [
+                  person,
+                  distance(personPosition(person), position),
+                ])
+                .filter(([_, distance]) => distance <= range);
 
-              return chanceOfStayingHealthy > Math.random() ? person : infectSusceptible(person);
+              const chanceOfStayingHealthy = infectiousPeopleInRange.reduce(
+                (acc, [_, dist]) => acc * ((hygiene * dist) / range) ** 0.5,
+                1
+              );
+
+              if (chanceOfStayingHealthy > Math.random()) {
+                return person;
+              } else {
+                infectiousPeopleInRange.forEach(([person, _]) => (person.infectedCount += 1));
+                return infectSusceptible(person);
+              }
             case "infectious":
               const timeInfected = timeNow - person.infectedAt;
               return timeInfected >= lasts * 1000 ? removeInfectious(person) : person;
@@ -140,9 +155,9 @@ const Simulation: React.FunctionComponent = () => {
     return () => clearInterval(interval);
   }, [lasts, people, range, hygiene, startedAt]);
 
-  const susceptible = () => onlyKind(people, "susceptible").length;
-  const infectious = () => onlyKind(people, "infectious").length;
-  const removed = () => onlyKind(people, "removed").length;
+  const susceptible = () => onlyKind<Susceptible>(people, "susceptible").length;
+  const infectious = () => onlyKind<Infectious>(people, "infectious").length;
+  const removed = () => onlyKind<Removed>(people, "removed").length;
 
   return (
     <div
@@ -173,7 +188,7 @@ const Simulation: React.FunctionComponent = () => {
           <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
         </List>
       </div>
-      <Graph people={people} startedAt={startedAt} />
+      <Graph people={people} startedAt={startedAt} lasts={lasts} />
       <div style={{ flexGrow: 0.5, minWidth: "250px", margin: "20px" }}>
         <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
