@@ -12,11 +12,11 @@ interface Props {
 }
 
 const DrawPerson: React.FunctionComponent<Props> = ({ person, range, showRemoved, showPaths }) => {
-  const [left, top] = personPosition(person);
+  const { x, y } = personPosition(person);
   return (
     <>
-      <PersonPoint person={person} top={top} left={left} showRemoved={showRemoved} />
-      <PersonBorder person={person} range={range} top={top} left={left} />
+      <PersonPoint person={person} top={y} left={x} showRemoved={showRemoved} />
+      <PersonBorder person={person} range={range} top={y} left={x} />
       {showPaths && <PersonPath person={person} showRemoved={showRemoved} />}
     </>
   );

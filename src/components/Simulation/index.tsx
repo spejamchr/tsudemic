@@ -7,11 +7,14 @@ import Display from "../Display";
 import Graph from "../Graph";
 import Timer from "../Timer";
 
-type XY = [number, number];
+interface XY {
+  x: number;
+  y: number;
+}
 
 const randRange = (a: number, b: number): number => a + Math.random() * (b - a);
 
-const randXY = (): XY => [randRange(0, maxXY), randRange(0, maxXY)];
+const randXY = (): XY => ({ x: randRange(0, maxXY), y: randRange(0, maxXY) });
 
 interface PersonBase {
   id: number;
@@ -69,10 +72,10 @@ const move = (person: Person): Person => ({
   angle: (person.angle + person.speed / person.radius + Math.PI * 2) % (Math.PI * 2),
 });
 
-export const personPosition = (person: Person): XY => [
-  person.radius * Math.cos(person.angle) + person.center[0],
-  person.radius * Math.sin(person.angle) + person.center[1],
-];
+export const personPosition = (person: Person): XY => ({
+  x: person.radius * Math.cos(person.angle) + person.center.x,
+  y: person.radius * Math.sin(person.angle) + person.center.y,
+});
 
 export type Person = Susceptible | Infectious | Removed;
 export const maxXY = 300;
@@ -91,7 +94,7 @@ const Simulation: React.FunctionComponent = () => {
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(false);
 
-  const distance = (a: XY, b: XY): number => ((b[1] - a[1]) ** 2 + (b[0] - a[0]) ** 2) ** 0.5;
+  const distance = (a: XY, b: XY): number => ((b.x - a.x) ** 2 + (b.y - a.y) ** 2) ** 0.5;
 
   const startSimulation = () => {
     intervalInt.do(clearInterval);

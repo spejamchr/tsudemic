@@ -10,7 +10,7 @@ interface Props {
 const PersonPath: React.FunctionComponent<Props> = ({
   person: {
     kind,
-    center: [x, y],
+    center: { x, y },
     radius: r,
   },
   showRemoved,
