@@ -79,6 +79,8 @@ export const maxXY = 300;
 export const minR = 10;
 export const maxR = 60;
 
+let intervalInt = nothing<number>();
+
 const Simulation: React.FunctionComponent = () => {
   const [startedAt, setStartedAt] = useState(nothing<number>());
   const [people, setPeople] = useState([] as Person[]);
@@ -92,6 +94,7 @@ const Simulation: React.FunctionComponent = () => {
   const distance = (a: XY, b: XY): number => ((b[1] - a[1]) ** 2 + (b[0] - a[0]) ** 2) ** 0.5;
 
   const startSimulation = () => {
+    intervalInt.do(clearInterval);
     let tmpPeople: Person[] = [];
     for (let i = 0; i < population; i++) {
       let person: Person = susceptibleCons(i);
@@ -105,6 +108,8 @@ const Simulation: React.FunctionComponent = () => {
   };
 
   useEffect(() => {
+    intervalInt.do(clearInterval);
+
     const tick = (): void => {
       const infectiousPeople = onlyKind<Infectious>(people, "infectious");
       const timeNow = new Date().valueOf();
@@ -148,11 +153,17 @@ const Simulation: React.FunctionComponent = () => {
       );
       setPeople(newPeople);
     };
-    const interval = setInterval(
-      startedAt.map(() => tick).getOrElseValue(() => {}),
-      35
+
+    intervalInt = just(
+      window.setInterval(
+        startedAt.map(() => tick).getOrElseValue(() => {}),
+        35
+      )
     );
-    return () => clearInterval(interval);
+
+    return () => {
+      intervalInt.do(clearInterval);
+    };
   }, [lasts, people, range, hygiene, startedAt]);
 
   const susceptible = () => onlyKind<Susceptible>(people, "susceptible").length;
