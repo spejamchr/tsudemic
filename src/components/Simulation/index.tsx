@@ -114,46 +114,61 @@ const Simulation: React.FunctionComponent = () => {
     intervalInt.do(clearInterval);
 
     const tick = (): void => {
+      const susceptiblePeople = onlyKind<Susceptible>(people, "susceptible");
       const infectiousPeople = onlyKind<Infectious>(people, "infectious");
+      const removedPeople = onlyKind<Removed>(people, "removed");
+
       const timeNow = new Date().valueOf();
+
       if (infectiousPeople.length === 0) {
         return;
       }
-      const newPeople = people.map(
-        (person: Person): Person => {
-          person = move(person);
-          switch (person.kind) {
-            case "susceptible":
-              const position = personPosition(person);
 
-              const infectiousPeopleInRange = infectiousPeople
-                .map<[Infectious, number]>(person => [
-                  person,
-                  distance(personPosition(person), position),
-                ])
-                .filter(([_, distance]) => distance <= range);
+      const newPeople = ([] as Person[])
+        .concat(
+          susceptiblePeople.map(person => {
+            const position = personPosition(person);
 
-              const chanceOfStayingHealthy = infectiousPeopleInRange.reduce(
-                (acc, [_, dist]) => acc * ((hygiene * dist) / range) ** 0.5,
-                1
+            const infectiousPeopleInRange = infectiousPeople
+              .map(person => ({ person, dist: distance(personPosition(person), position) }))
+              .filter(({ dist }) => dist <= range);
+
+            const chanceOfStayingHealthy = infectiousPeopleInRange.reduce(
+              (acc, { dist }) => acc * ((hygiene * dist) / range) ** 0.5,
+              1
+            );
+
+            if (chanceOfStayingHealthy > Math.random()) {
+              return person;
+            } else {
+              const totalClaim = infectiousPeopleInRange.reduce(
+                (acc, { dist }) => acc + 1 - dist / range,
+                0
               );
+              console.log(
+                "before: ",
+                infectiousPeopleInRange.reduce((a, { person }) => a + person.infectedCount, 0)
+              );
+              infectiousPeopleInRange.forEach(
+                ({ person, dist }) => (person.infectedCount += (1 - dist / range) / totalClaim)
+              );
+              console.log(
+                "after: ",
+                infectiousPeopleInRange.reduce((a, { person }) => a + person.infectedCount, 0)
+              );
+              return infectSusceptible(person);
+            }
+          })
+        )
+        .concat(
+          infectiousPeople.map(person => {
+            const timeInfected = timeNow - person.infectedAt;
+            return timeInfected >= lasts * 1000 ? removeInfectious(person) : person;
+          })
+        )
+        .concat(removedPeople)
+        .map(move);
 
-              if (chanceOfStayingHealthy > Math.random()) {
-                return person;
-              } else {
-                infectiousPeopleInRange.forEach(([person, _]) => (person.infectedCount += 1));
-                return infectSusceptible(person);
-              }
-            case "infectious":
-              const timeInfected = timeNow - person.infectedAt;
-              return timeInfected >= lasts * 1000 ? removeInfectious(person) : person;
-            case "removed":
-              return person;
-            default:
-              return person;
-          }
-        }
-      );
       setPeople(newPeople);
     };
 
