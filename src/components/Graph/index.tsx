@@ -2,6 +2,7 @@ import { useTheme } from "@material-ui/core";
 import { Maybe } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import * as Victory from "victory";
+import RatioContainer from "../RatioContainer";
 import { Infectious, onlyKind, Person, Removed } from "../Simulation";
 
 interface Props {
@@ -104,8 +105,8 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
   }
 
   return (
-    <div style={{ width: "300px" }}>
-      <div style={{ margin: "20px", border: `solid 2px ${theme.palette.primary.main}` }}>
+    <>
+      <RatioContainer ratio={100}>
         <Victory.VictoryChart theme={vTheme}>
           <Victory.VictoryLine
             style={{ data: { stroke: theme.palette.primary.main } }}
@@ -120,8 +121,8 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
             data={xyData(rems)}
           />
         </Victory.VictoryChart>
-      </div>
-      <div style={{ margin: "20px", border: `solid 2px ${theme.palette.primary.main}` }}>
+      </RatioContainer>
+      <RatioContainer ratio={100}>
         <Victory.VictoryChart theme={vTheme}>
           <Victory.VictoryLine
             style={{ data: { stroke: theme.palette.secondary.main } }}
@@ -132,8 +133,8 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
             data={xyData(hFac)}
           />
         </Victory.VictoryChart>
-      </div>
-    </div>
+      </RatioContainer>
+    </>
   );
 };
 
