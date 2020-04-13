@@ -56,11 +56,12 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
       setHFac(f => f.concat(historicalHFactor(people)));
       setTimes(t => t.concat(timeNow));
     });
-    // React warns here about a missing dependency: 'times'. However, this is
-    // deliberately *not* a dependency here. When updating this function,
-    // enable eslint to check for accidentally missed dependencies.
+    // React warns here about missing dependencies: 'lasts' and 'times'.
+    // However, these are deliberately *not* dependencies here. When updating
+    // this function, enable eslint to check for accidentally missed
+    // dependencies.
     // eslint-disable-next-line
-  }, [people, startedAt, lasts]);
+  }, [people, startedAt]);
 
   const xyData = (sir: number[]): { x: number; y: number }[] =>
     startedAt
