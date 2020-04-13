@@ -2,8 +2,16 @@ import { useTheme } from "@material-ui/core";
 import { Maybe } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import * as Victory from "victory";
+import {
+  Infectious,
+  onlyKind,
+  Person,
+  Removed,
+  Susceptible,
+  currentRFactor,
+  historicalHFactor,
+} from "../../utils";
 import RatioContainer from "../RatioContainer";
-import { Infectious, onlyKind, Person, Removed } from "../Simulation";
 
 interface Props {
   people: Person[];
@@ -41,19 +49,18 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
         return;
       }
 
-      setSucs(s => s.concat(onlyKind(people, "susceptible").length));
-      setInfs(i => i.concat(onlyKind(people, "infectious").length));
-      setRems(r => r.concat(onlyKind(people, "removed").length));
-      setRFac(f => f.concat(currentRFactor()));
-      setHFac(f => f.concat(historicalHFactor()));
+      setSucs(s => s.concat(onlyKind<Susceptible>(people, "susceptible").length));
+      setInfs(i => i.concat(onlyKind<Infectious>(people, "infectious").length));
+      setRems(r => r.concat(onlyKind<Removed>(people, "removed").length));
+      setRFac(f => f.concat(currentRFactor(people, lasts)));
+      setHFac(f => f.concat(historicalHFactor(people)));
       setTimes(t => t.concat(timeNow));
     });
-    // React warns here about missing dependencies: 'currentRFactor',
-    // 'historicalHFactor', and 'times'. However, these are deliberately *not*
-    // dependencies here. When updating this function, enable eslint to check
-    // for accidentally missed dependencies.
+    // React warns here about a missing dependency: 'times'. However, this is
+    // deliberately *not* a dependency here. When updating this function,
+    // enable eslint to check for accidentally missed dependencies.
     // eslint-disable-next-line
-  }, [people, startedAt]);
+  }, [people, startedAt, lasts]);
 
   const xyData = (sir: number[]): { x: number; y: number }[] =>
     startedAt
@@ -67,24 +74,6 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
         return xys.length < 2 ? [] : xys;
       })
       .getOrElseValue([]);
-
-  const historicalHFactor = () => {
-    const removed = onlyKind<Removed>(people, "removed");
-    return removed.reduce((acc, inf) => acc + inf.infectedCount, 0) / removed.length;
-  };
-
-  const currentRFactor = () => {
-    const currentTime = new Date().valueOf();
-    const infectious = onlyKind<Infectious>(people, "infectious");
-
-    return (
-      infectious.reduce(
-        (acc, person) =>
-          acc + (person.infectedCount / (currentTime - person.infectedAt)) * lasts * 1000,
-        0
-      ) / infectious.length
-    );
-  };
 
   const labelStyles = {
     fontFamily: theme.typography.fontFamily,

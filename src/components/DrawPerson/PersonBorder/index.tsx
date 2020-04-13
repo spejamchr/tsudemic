@@ -1,6 +1,6 @@
 import { useTheme } from "@material-ui/core";
 import React from "react";
-import { Person } from "../../Simulation";
+import { Person } from "../../../utils";
 import SimplePath from "../PersonPath/SimplePath";
 
 interface Props {

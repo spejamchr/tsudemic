@@ -1,6 +1,6 @@
+import { useTheme } from "@material-ui/core/styles";
 import React from "react";
-import { Person } from "../../Simulation";
-import { useTheme, Theme } from "@material-ui/core/styles";
+import { Person } from "../../../utils";
 
 interface Props {
   person: Person;
@@ -8,20 +8,21 @@ interface Props {
   left: number;
 }
 
-const color = (theme: Theme, person: Person): string => {
-  switch (person.kind) {
-    case "susceptible":
-      return theme.palette.primary.main;
-    case "infectious":
-      return theme.palette.secondary.main;
-    case "removed":
-      return theme.palette.grey[400];
-  }
-};
-
 const SimplePoint: React.FunctionComponent<Props> = ({ person, top, left }) => {
   const theme = useTheme();
-  return <circle cx={left} cy={top} r={2} fill={color(theme, person)} />;
+
+  const color = (person: Person): string => {
+    switch (person.kind) {
+      case "susceptible":
+        return theme.palette.primary.main;
+      case "infectious":
+        return theme.palette.secondary.main;
+      case "removed":
+        return theme.palette.grey[400];
+    }
+  };
+
+  return <circle cx={left} cy={top} r={2} fill={color(person)} />;
 };
 
 export default SimplePoint;

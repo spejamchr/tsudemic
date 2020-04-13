@@ -1,85 +1,23 @@
 import { Button, List } from "@material-ui/core";
 import { just, nothing } from "maybeasy";
 import React, { useEffect, useState } from "react";
+import {
+  Infectious,
+  infectSusceptible,
+  move,
+  onlyKind,
+  Person,
+  personPosition,
+  Removed,
+  removeInfectious,
+  Susceptible,
+  susceptibleCons,
+  XY,
+} from "../../utils";
 import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
 import Graph from "../Graph";
-
-interface XY {
-  x: number;
-  y: number;
-}
-
-const randRange = (a: number, b: number): number => a + Math.random() * (b - a);
-
-const randXY = (): XY => ({ x: randRange(0, maxXY), y: randRange(0, maxXY) });
-
-interface PersonBase {
-  id: number;
-  center: XY;
-  radius: number;
-  angle: number;
-  speed: number;
-}
-
-export interface Susceptible extends PersonBase {
-  kind: "susceptible";
-}
-
-const susceptibleCons = (id: number): Susceptible => ({
-  kind: "susceptible",
-  id,
-  center: randXY(),
-  radius: randRange(minR, maxR),
-  angle: randRange(0, 2 * Math.PI),
-  speed: randRange(1, 5) * (Math.random() > 0.5 ? 1 : -1),
-});
-
-export interface Infectious extends PersonBase {
-  kind: "infectious";
-  infectedAt: number;
-  infectedCount: number;
-}
-
-export interface Removed extends PersonBase {
-  kind: "removed";
-  infectedAt: number;
-  removedAt: number;
-  infectedCount: number;
-}
-
-const infectSusceptible = (person: Susceptible): Infectious => ({
-  ...person,
-  kind: "infectious",
-  infectedAt: new Date().valueOf(),
-  infectedCount: 0,
-});
-
-const removeInfectious = (person: Infectious): Removed => ({
-  ...person,
-  kind: "removed",
-  removedAt: new Date().valueOf(),
-});
-
-export function onlyKind<A extends Person>(people: Person[], type: A["kind"]): A[] {
-  return people.filter(({ kind }) => kind === type) as A[];
-}
-
-const move = (person: Person): Person => ({
-  ...person,
-  angle: (person.angle + person.speed / person.radius + Math.PI * 2) % (Math.PI * 2),
-});
-
-export const personPosition = (person: Person): XY => ({
-  x: person.radius * Math.cos(person.angle) + person.center.x,
-  y: person.radius * Math.sin(person.angle) + person.center.y,
-});
-
-export type Person = Susceptible | Infectious | Removed;
-export const maxXY = 300;
-export const minR = 10;
-export const maxR = 60;
 
 let intervalInt = nothing<number>();
 
@@ -134,11 +72,11 @@ const Simulation: React.FunctionComponent = () => {
           susceptiblePeople.map(person => {
             const position = personPosition(person);
 
-            const infectiousPeopleInRange = infectiousPeople
+            const infectiousInRange = infectiousPeople
               .map(person => ({ person, dist: distance(personPosition(person), position) }))
               .filter(({ dist }) => dist <= range);
 
-            const chanceOfStayingHealthy = infectiousPeopleInRange.reduce(
+            const chanceOfStayingHealthy = infectiousInRange.reduce(
               (acc, { dist }) => acc * ((hygiene * dist) / range) ** 0.5,
               1
             );
@@ -146,21 +84,9 @@ const Simulation: React.FunctionComponent = () => {
             if (chanceOfStayingHealthy > Math.random()) {
               return person;
             } else {
-              const totalClaim = infectiousPeopleInRange.reduce(
-                (acc, { dist }) => acc + 1 - dist / range,
-                0
-              );
-              console.log(
-                "before: ",
-                infectiousPeopleInRange.reduce((a, { person }) => a + person.infectedCount, 0)
-              );
-              infectiousPeopleInRange.forEach(
-                ({ person, dist }) => (person.infectedCount += (1 - dist / range) / totalClaim)
-              );
-              console.log(
-                "after: ",
-                infectiousPeopleInRange.reduce((a, { person }) => a + person.infectedCount, 0)
-              );
+              const claims = infectiousInRange.map(i => ({ ...i, claim: 1 - i.dist / range }));
+              const totalClaim = claims.reduce((acc, { claim }) => acc + claim, 0);
+              claims.forEach(({ person, claim }) => (person.infectedCount += claim / totalClaim));
               return infectSusceptible(person);
             }
           })
@@ -214,7 +140,7 @@ const Simulation: React.FunctionComponent = () => {
           start={startSimulation}
         />
         <List>
-          <Data people={people} />
+          <Data people={people} lasts={lasts} />
         </List>
         {startedAt
           .map(() => (

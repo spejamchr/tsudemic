@@ -1,5 +1,5 @@
 import React from "react";
-import { Person, personPosition } from "../Simulation";
+import { Person, personPosition } from "../../utils";
 import PersonBorder from "./PersonBorder";
 import PersonPath from "./PersonPath";
 import PersonPoint from "./PersonPoint";

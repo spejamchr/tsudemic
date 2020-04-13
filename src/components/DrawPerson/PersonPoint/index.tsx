@@ -1,5 +1,5 @@
 import React from "react";
-import { Person } from "../../Simulation";
+import { Person } from "../../../utils";
 import SimplePoint from "./SimplePoint";
 
 interface Props {

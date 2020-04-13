@@ -1,7 +1,7 @@
 import React from "react";
+import { maxR, maxXY, Person } from "../../utils";
 import DrawPerson from "../DrawPerson";
 import RatioContainer from "../RatioContainer";
-import { maxR, maxXY, Person } from "../Simulation";
 
 interface Props {
   people: Person[];
