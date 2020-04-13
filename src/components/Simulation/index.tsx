@@ -155,11 +155,11 @@ const Simulation: React.FunctionComponent = () => {
           ))
           .getOrElseValue(<></>)}
       </div>
+      <div style={{ flexGrow: 0.6, minWidth: "300px" }}>
+        <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
+      </div>
       <div style={{ flexGrow: 0.3, minWidth: "300px" }}>
         <Graph people={people} startedAt={startedAt} lasts={lasts} />
-      </div>
-      <div style={{ flexGrow: 0.4, minWidth: "300px" }}>
-        <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
     </div>
   );
