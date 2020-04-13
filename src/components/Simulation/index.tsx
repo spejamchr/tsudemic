@@ -5,7 +5,6 @@ import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
 import Graph from "../Graph";
-import Timer from "../Timer";
 
 interface XY {
   x: number;
@@ -190,10 +189,6 @@ const Simulation: React.FunctionComponent = () => {
     };
   }, [lasts, people, range, hygiene, startedAt]);
 
-  const susceptible = () => onlyKind<Susceptible>(people, "susceptible").length;
-  const infectious = () => onlyKind<Infectious>(people, "infectious").length;
-  const removed = () => onlyKind<Removed>(people, "removed").length;
-
   return (
     <div
       style={{
@@ -219,8 +214,7 @@ const Simulation: React.FunctionComponent = () => {
           start={startSimulation}
         />
         <List>
-          <Timer startedAt={startedAt} stopped={infectious() === 0} />
-          <Data susceptible={susceptible()} infectious={infectious()} removed={removed()} />
+          <Data people={people} />
         </List>
         {startedAt
           .map(() => (
