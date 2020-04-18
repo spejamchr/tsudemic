@@ -4,7 +4,7 @@ import DrawPerson from "../DrawPerson";
 import RatioContainer from "../RatioContainer";
 
 interface Props {
-  people: Person[];
+  people: ReadonlyArray<Person>;
   range: number;
   showRemoved: boolean;
   showPaths: boolean;

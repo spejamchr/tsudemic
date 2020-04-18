@@ -3,18 +3,19 @@ import { Maybe } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import * as Victory from "victory";
 import {
+  currentRFactor,
+  historicalHFactor,
   Infectious,
   onlyKind,
   Person,
   Removed,
   Susceptible,
-  currentRFactor,
-  historicalHFactor,
 } from "../../utils";
+import stopwatch from "../../utils/stopwatch";
 import RatioContainer from "../RatioContainer";
 
 interface Props {
-  people: Person[];
+  people: ReadonlyArray<Person>;
   startedAt: Maybe<number>;
   lasts: number;
 }
@@ -43,7 +44,7 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
 
   useEffect(() => {
     startedAt.do(started => {
-      const timeNow = new Date().valueOf();
+      const timeNow = stopwatch.now();
 
       if (times.length > 0 && timeNow - times.slice(-1)[0] < timeLimit(timeNow, started)) {
         return;

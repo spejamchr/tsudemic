@@ -14,7 +14,7 @@ import {
 import Info from "../Info";
 
 interface Props {
-  people: Person[];
+  people: ReadonlyArray<Person>;
   lasts: number;
 }
 

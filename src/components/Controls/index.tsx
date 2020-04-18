@@ -1,5 +1,4 @@
 import {
-  Button,
   FormControl,
   FormControlLabel,
   FormGroup,
@@ -23,7 +22,6 @@ interface Props {
   setShowRemoved: (showRemoved: boolean) => void;
   showPaths: boolean;
   setShowPaths: (showPaths: boolean) => void;
-  start: () => void;
 }
 
 const parseNumberAnd = (setThing: (thing: number) => void) => (
@@ -48,7 +46,6 @@ const Controls: React.FunctionComponent<Props> = ({
   setShowRemoved,
   showPaths,
   setShowPaths,
-  start,
 }) => {
   return (
     <FormControl component="fieldset" style={{ width: "100%" }}>
@@ -130,9 +127,6 @@ const Controls: React.FunctionComponent<Props> = ({
           }
           label="Show Removed?"
         />
-        <Button variant="contained" color="primary" onClick={start}>
-          Start
-        </Button>
       </FormGroup>
     </FormControl>
   );
