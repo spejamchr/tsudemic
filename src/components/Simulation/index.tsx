@@ -1,4 +1,3 @@
-import { Button } from "@material-ui/core";
 import { just, nothing } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import { infectSusceptible, Person, susceptibleCons } from "../../utils";
@@ -8,7 +7,7 @@ import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
 import Graph from "../Graph";
-import PlayPauseButton from "../PlayPauseButton";
+import PlayPauseStopButton from "../PlayPauseStopButton";
 
 let intervalInt = nothing<number>();
 
@@ -68,6 +67,12 @@ const Simulation: React.FunctionComponent = () => {
       }}
     >
       <div style={{ width: "250px", margin: "20px" }}>
+        <PlayPauseStopButton
+          startSimulation={startSimulation}
+          continueSimulation={continueSimulation}
+          stopSimulation={stopSimulation}
+        />
+
         <Controls
           lasts={lasts}
           setLasts={setLasts}
@@ -83,27 +88,7 @@ const Simulation: React.FunctionComponent = () => {
           setShowPaths={setShowPaths}
         />
 
-        <PlayPauseButton
-          startSimulation={startSimulation}
-          continueSimulation={continueSimulation}
-        />
-
         <Data people={people} lasts={lasts} />
-
-        {stopwatch
-          .whenStarted()
-          .orElse(stopwatch.whenPaused)
-          .map(() => (
-            <Button
-              style={{ width: "100%" }}
-              variant="contained"
-              color="secondary"
-              onClick={stopSimulation}
-            >
-              Clear
-            </Button>
-          ))
-          .getOrElseValue(<></>)}
       </div>
       <div style={{ flexGrow: 0.6, minWidth: "300px" }}>
         <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
