@@ -44,12 +44,12 @@ const PlayPauseStopButton: React.FunctionComponent<Props> = ({
     />
   );
 
-  const startButton = (
+  const startButton = (title: string) => (
     <ContainedButton
       className={classes.onlyButton}
       color="primary"
       onClick={startSimulation}
-      title="Start"
+      title={title}
     />
   );
 
@@ -57,7 +57,7 @@ const PlayPauseStopButton: React.FunctionComponent<Props> = ({
     case "stopped":
       return (
         <div className={classes.container}>
-          {startButton}
+          {startButton("Start")}
           <ContainedButton
             className={classes.secondButton}
             color="secondary"
@@ -92,7 +92,7 @@ const PlayPauseStopButton: React.FunctionComponent<Props> = ({
     case "over":
       return (
         <div className={classes.container}>
-          {startButton}
+          {startButton("Restart")}
           {stopButton}
         </div>
       );
