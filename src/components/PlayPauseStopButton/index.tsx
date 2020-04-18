@@ -44,16 +44,20 @@ const PlayPauseStopButton: React.FunctionComponent<Props> = ({
     />
   );
 
+  const startButton = (
+    <ContainedButton
+      className={classes.onlyButton}
+      color="primary"
+      onClick={startSimulation}
+      title="Start"
+    />
+  );
+
   switch (stopwatch.kind()) {
     case "stopped":
       return (
         <div className={classes.container}>
-          <ContainedButton
-            className={classes.onlyButton}
-            color="primary"
-            onClick={startSimulation}
-            title="Start"
-          />
+          {startButton}
           <ContainedButton
             className={classes.secondButton}
             color="secondary"
@@ -82,6 +86,13 @@ const PlayPauseStopButton: React.FunctionComponent<Props> = ({
             onClick={continueSimulation}
             title="Continue"
           />
+          {stopButton}
+        </div>
+      );
+    case "over":
+      return (
+        <div className={classes.container}>
+          {startButton}
           {stopButton}
         </div>
       );

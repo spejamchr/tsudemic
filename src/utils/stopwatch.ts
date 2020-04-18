@@ -4,6 +4,8 @@ const assertNever = (thing: never): never => {
   throw new Error(`Unexpectedly received something: ${thing}`);
 };
 
+const dateNow = () => new Date().valueOf();
+
 interface Stopped {
   kind: "stopped";
 }
@@ -33,7 +35,23 @@ interface Paused {
   base: number;
 }
 
-const dateNow = () => new Date().valueOf();
+const pause = (state: Started): Paused => ({
+  kind: "paused",
+  base: stateNow(state),
+});
+
+// Like "stopped", but with a time. Used when the sim is over and the ending time needs to be read.
+interface Over {
+  kind: "over";
+  now: number;
+}
+
+const over = (state: State): Over => ({
+  kind: "over",
+  now: stateNow(state),
+});
+
+type State = Stopped | Started | Paused | Over;
 
 const stateNow = (state: State): number => {
   switch (state.kind) {
@@ -43,15 +61,10 @@ const stateNow = (state: State): number => {
       return state.base;
     case "started":
       return state.base + dateNow() - state.startedAt;
+    case "over":
+      return state.now;
   }
 };
-
-const pause = (state: Started): Paused => ({
-  kind: "paused",
-  base: stateNow(state),
-});
-
-type State = Stopped | Started | Paused;
 
 class Stopwatch {
   private state: State;
@@ -69,6 +82,7 @@ class Stopwatch {
   start = (): void => {
     switch (this.state.kind) {
       case "stopped":
+      case "over":
         this.state = started();
         break;
       case "started":
@@ -85,6 +99,7 @@ class Stopwatch {
     switch (this.state.kind) {
       case "stopped":
       case "paused":
+      case "over":
         break;
       case "started":
         this.state = pause(this.state);
@@ -98,10 +113,15 @@ class Stopwatch {
     this.state = stopped();
   };
 
+  over = (): void => {
+    this.state = over(this.state);
+  };
+
   whenStarted = (): Maybe<Stopwatch> => {
     switch (this.state.kind) {
       case "stopped":
       case "paused":
+      case "over":
         return nothing();
       case "started":
         return just(this);
@@ -112,6 +132,7 @@ class Stopwatch {
     switch (this.state.kind) {
       case "stopped":
       case "started":
+      case "over":
         return nothing();
       case "paused":
         return just(this);
@@ -122,8 +143,20 @@ class Stopwatch {
     switch (this.state.kind) {
       case "started":
       case "paused":
+      case "over":
         return nothing();
       case "stopped":
+        return just(this);
+    }
+  };
+
+  whenOver = (): Maybe<Stopwatch> => {
+    switch (this.state.kind) {
+      case "started":
+      case "paused":
+      case "stopped":
+        return nothing();
+      case "over":
         return just(this);
     }
   };

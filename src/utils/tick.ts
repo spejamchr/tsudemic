@@ -53,8 +53,8 @@ const tick = (
   const removedPeople = onlyKind<Removed>(people, "removed");
 
   if (infectiousPeople.length === 0) {
-    stopwatch.stop();
-    setPeople(people.map(person => ({ ...person, speed: 0 })));
+    stopwatch.over();
+    setPeople(people.slice(-1).concat(people.slice(0, -1)));
     return;
   }
 
