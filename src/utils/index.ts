@@ -89,11 +89,12 @@ export const currentRFactor = (people: ReadonlyArray<Person>, lasts: number): nu
   const infectious = onlyKind<Infectious>(people, "infectious");
 
   return (
-    infectious.reduce(
-      (acc, person) =>
-        acc + (person.infectedCount / (currentTime - person.infectedAt)) * lasts * 1000,
-      0
-    ) / infectious.length
+    infectious
+      .filter(person => person.infectedAt !== currentTime)
+      .reduce(
+        (acc, person) => acc + (person.infectedCount / (currentTime - person.infectedAt)) * lasts,
+        0
+      ) / infectious.length
   );
 };
 

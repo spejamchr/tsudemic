@@ -1,4 +1,4 @@
-import { ListItem, ListItemText, makeStyles } from "@material-ui/core";
+import { List, ListItem, ListItemText, makeStyles } from "@material-ui/core";
 import React from "react";
 import {
   currentRFactor,
@@ -34,7 +34,7 @@ const Data: React.FunctionComponent<Props> = ({ people, lasts }) => {
   const classes = useStyles();
 
   return (
-    <>
+    <List>
       <ListItem>
         <ListItemText primaryTypographyProps={{ className: classes.aligned }}>
           <Info>The number of people who haven't been infected</Info>
@@ -76,7 +76,7 @@ const Data: React.FunctionComponent<Props> = ({ people, lasts }) => {
         </ListItemText>
         <ListItemText primary={rHist} style={{ textAlign: "right" }} />
       </ListItem>
-    </>
+    </List>
   );
 };
 

@@ -51,7 +51,7 @@ const Controls: React.FunctionComponent<Props> = ({
     <FormControl component="fieldset" style={{ width: "100%" }}>
       <FormGroup>
         <Typography id="lasts-slider" gutterBottom>
-          Infectious Period: {lasts}s
+          Infectious Period: {lasts / 1000}s
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs>
@@ -59,8 +59,9 @@ const Controls: React.FunctionComponent<Props> = ({
               value={lasts}
               onChange={parseNumberAnd(setLasts)}
               aria-labelledby="lasts-slider"
-              min={1}
-              max={60}
+              min={1000}
+              max={60_000}
+              step={1000}
             />
           </Grid>
         </Grid>

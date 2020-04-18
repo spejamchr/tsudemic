@@ -37,9 +37,9 @@ const handleSusceptible = (
 };
 
 const handleInfectious = (timeNow: number, lasts: number) => (person: Infectious) =>
-  timeNow - person.infectedAt >= lasts * 1000 ? removeInfectious(person) : person;
+  timeNow - person.infectedAt >= lasts ? removeInfectious(person) : person;
 
-export default (
+const tick = (
   people: ReadonlyArray<Person>,
   range: number,
   hygiene: number,
@@ -65,3 +65,5 @@ export default (
       .concat(removedPeople)
   );
 };
+
+export default tick;

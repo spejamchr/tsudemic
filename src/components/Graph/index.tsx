@@ -10,6 +10,7 @@ import {
   Person,
   Removed,
   Susceptible,
+  XY,
 } from "../../utils";
 import stopwatch from "../../utils/stopwatch";
 import RatioContainer from "../RatioContainer";
@@ -64,7 +65,7 @@ const Graph: React.FunctionComponent<Props> = ({ people, startedAt, lasts }) => 
     // eslint-disable-next-line
   }, [people, startedAt]);
 
-  const xyData = (sir: number[]): { x: number; y: number }[] =>
+  const xyData = (sir: number[]): XY[] =>
     startedAt
       .map(t => {
         const xys = sir

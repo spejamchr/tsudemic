@@ -1,4 +1,4 @@
-import { Button, List } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import { just, nothing } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import { infectSusceptible, Person, susceptibleCons } from "../../utils";
@@ -17,7 +17,7 @@ const Simulation: React.FunctionComponent = () => {
   const [people, setPeople] = useState([] as ReadonlyArray<Person>);
   const [population, setPopulation] = useState(100);
   const [range, setRange] = useState(15);
-  const [lasts, setLasts] = useState(3);
+  const [lasts, setLasts] = useState(3000);
   const [hygiene, setHygiene] = useState(1);
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(false);
@@ -88,9 +88,7 @@ const Simulation: React.FunctionComponent = () => {
           continueSimulation={continueSimulation}
         />
 
-        <List>
-          <Data people={people} lasts={lasts} />
-        </List>
+        <Data people={people} lasts={lasts} />
 
         {stopwatch
           .whenStarted()
