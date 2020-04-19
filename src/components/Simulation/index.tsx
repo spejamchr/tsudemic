@@ -2,7 +2,7 @@ import { just, nothing } from "maybeasy";
 import React, { useEffect, useState } from "react";
 import { infectSusceptible, Person, susceptibleCons } from "../../utils";
 import stopwatch from "../../utils/stopwatch";
-import tick from "../../utils/tick";
+import tick, { TickArgs } from "../../utils/tick";
 import Controls from "../Controls";
 import Data from "../Data";
 import Display from "../Display";
@@ -18,8 +18,18 @@ const Simulation: React.FunctionComponent = () => {
   const [range, setRange] = useState(15);
   const [lasts, setLasts] = useState(3000);
   const [hygiene, setHygiene] = useState(1);
+  const [socialDistancing, setSocialDistancing] = useState(1);
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(false);
+
+  const tickArgs = (): TickArgs => ({
+    people,
+    range,
+    lasts,
+    hygiene,
+    socialDistancing,
+    setPeople,
+  });
 
   const stopSimulation = () => {
     stopwatch.stop();
@@ -30,7 +40,7 @@ const Simulation: React.FunctionComponent = () => {
 
   const continueSimulation = () => {
     stopwatch.start();
-    tick(people, range, hygiene, lasts, setPeople);
+    tick(tickArgs());
   };
 
   const startSimulation = () => {
@@ -49,14 +59,12 @@ const Simulation: React.FunctionComponent = () => {
   };
 
   useEffect(() => {
-    intervalInt = stopwatch
-      .whenStarted()
-      .map(() => window.setInterval(() => tick(people, range, hygiene, lasts, setPeople), 35));
+    intervalInt = stopwatch.whenStarted().map(() => window.setInterval(() => tick(tickArgs()), 35));
 
     return () => {
       intervalInt.do(clearInterval);
     };
-  }, [lasts, people, range, hygiene, startedAt]);
+  }, [people, range, lasts, hygiene, socialDistancing, startedAt]);
 
   return (
     <div
@@ -86,6 +94,8 @@ const Simulation: React.FunctionComponent = () => {
           setShowRemoved={setShowRemoved}
           showPaths={showPaths}
           setShowPaths={setShowPaths}
+          socialDistancing={socialDistancing}
+          setSocialDistancing={setSocialDistancing}
         />
 
         <Data people={people} lasts={lasts} />

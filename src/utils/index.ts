@@ -10,6 +10,7 @@ interface PersonBase {
   id: number;
   center: XY;
   radius: number;
+  homeAngle: number;
   angle: number;
   speed: number;
 }
@@ -49,7 +50,8 @@ export const susceptibleCons = (id: number): Susceptible => ({
   center: randXY(),
   radius: randRange(minR, maxR),
   angle: randRange(0, 2 * Math.PI),
-  speed: (randRange(1, 5) * (Math.random() > 0.5 ? 1 : -1)) / 2000,
+  homeAngle: randRange(0, 2 * Math.PI),
+  speed: randRange(1, 5) * (Math.random() > 0.5 ? 1 : -1),
 });
 
 export const infectSusceptible = (person: Susceptible): Infectious => ({
@@ -70,12 +72,31 @@ export const onlyKind = <A extends Person>(
   type: A["kind"]
 ): ReadonlyArray<A> => (people.filter(({ kind }) => kind === type) as A[]) as ReadonlyArray<A>;
 
-export const personPosition = (person: Person): XY => {
-  const angle = person.angle + person.speed * stopwatch.now();
+export const personPosition = (person: Person): XY => ({
+  x: person.radius * Math.cos(person.angle) + person.center.x,
+  y: person.radius * Math.sin(person.angle) + person.center.y,
+});
+
+const absAngleDiff = (a: number, b: number) =>
+  Math.abs(((a - b + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
+
+export const move = (socialDistancing: number) => (person: Person): Person => {
+  if (socialDistancing === 10) {
+    return {
+      ...person,
+      angle: person.homeAngle,
+    };
+  }
+  const angleDiff = absAngleDiff(person.angle, person.homeAngle);
+  const speed =
+    angleDiff > (Math.PI * 2) / (socialDistancing + 1)
+      ? person.speed * socialDistancing
+      : person.speed / socialDistancing;
+  const angle = (person.angle + speed / person.radius + Math.PI * 2) % (Math.PI * 2);
 
   return {
-    x: person.radius * Math.cos(angle) + person.center.x,
-    y: person.radius * Math.sin(angle) + person.center.y,
+    ...person,
+    angle,
   };
 };
 

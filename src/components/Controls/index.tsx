@@ -22,6 +22,8 @@ interface Props {
   setShowRemoved: (showRemoved: boolean) => void;
   showPaths: boolean;
   setShowPaths: (showPaths: boolean) => void;
+  socialDistancing: number;
+  setSocialDistancing: (socialDistancing: number) => void;
 }
 
 const parseNumberAnd = (setThing: (thing: number) => void) => (
@@ -46,6 +48,8 @@ const Controls: React.FunctionComponent<Props> = ({
   setShowRemoved,
   showPaths,
   setShowPaths,
+  socialDistancing,
+  setSocialDistancing,
 }) => {
   return (
     <FormControl component="fieldset" style={{ width: "100%" }}>
@@ -105,6 +109,21 @@ const Controls: React.FunctionComponent<Props> = ({
               min={0}
               max={5}
               step={0.1}
+            />
+          </Grid>
+        </Grid>
+        <Typography id="social-distancing-slider" gutterBottom>
+          Social Distancing: {socialDistancing}
+        </Typography>
+        <Grid container spacing={2}>
+          <Grid item xs>
+            <Slider
+              value={socialDistancing}
+              onChange={parseNumberAnd(setSocialDistancing)}
+              aria-labelledby="social-distancing-slider"
+              min={1}
+              max={10}
+              step={0.02}
             />
           </Grid>
         </Grid>

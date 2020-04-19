@@ -2,6 +2,7 @@ import {
   calcDistance,
   Infectious,
   infectSusceptible,
+  move,
   onlyKind,
   Person,
   personPosition,
@@ -19,7 +20,10 @@ const handleSusceptible = (
   const position = personPosition(person);
 
   const infectiousInRange = infectiousPeople
-    .map(person => ({ person, distance: calcDistance(personPosition(person), position) }))
+    .map(person => ({
+      person,
+      distance: calcDistance(personPosition(person), position),
+    }))
     .filter(({ distance }) => distance <= range);
 
   const staysHealthy =
@@ -39,13 +43,16 @@ const handleSusceptible = (
 const handleInfectious = (timeNow: number, lasts: number) => (person: Infectious) =>
   timeNow - person.infectedAt >= lasts ? removeInfectious(person) : person;
 
-const tick = (
-  people: ReadonlyArray<Person>,
-  range: number,
-  hygiene: number,
-  lasts: number,
-  setPeople: (people: ReadonlyArray<Person>) => void
-): void => {
+export interface TickArgs {
+  people: ReadonlyArray<Person>;
+  range: number;
+  lasts: number;
+  hygiene: number;
+  socialDistancing: number;
+  setPeople: (people: ReadonlyArray<Person>) => void;
+}
+
+const tick = ({ people, range, lasts, hygiene, socialDistancing, setPeople }: TickArgs): void => {
   const timeNow = stopwatch.now();
 
   const susceptiblePeople = onlyKind<Susceptible>(people, "susceptible");
@@ -63,6 +70,7 @@ const tick = (
       .concat(susceptiblePeople.map(handleSusceptible(infectiousPeople, range, hygiene)))
       .concat(infectiousPeople.map(handleInfectious(timeNow, lasts)))
       .concat(removedPeople)
+      .map(move(socialDistancing))
   );
 };
 
