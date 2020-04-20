@@ -74,7 +74,7 @@ const Simulation: React.FunctionComponent = () => {
         justifyContent: "space-around",
       }}
     >
-      <div style={{ width: "250px", margin: "20px" }}>
+      <div style={{ width: "250px", margin: "0 20px" }}>
         <PlayPauseStopButton
           startSimulation={startSimulation}
           continueSimulation={continueSimulation}

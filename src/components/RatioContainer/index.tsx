@@ -9,7 +9,7 @@ const RatioContainer: React.FunctionComponent<Props> = ({ ratio, children }) => 
   const theme = useTheme();
 
   return (
-    <div style={{ position: "relative", margin: "20px" }}>
+    <div style={{ position: "relative", marginBottom: "20px", marginRight: "20px" }}>
       <div style={{ paddingBottom: `${ratio}%` }} />
       <div
         style={{
