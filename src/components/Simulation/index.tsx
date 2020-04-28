@@ -22,14 +22,14 @@ const Simulation: React.FunctionComponent = () => {
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(false);
 
-  const tickArgs = (): TickArgs => ({
+  const tickArgs: TickArgs = {
     people,
     range,
     lasts,
     hygiene,
     socialDistancing,
     setPeople,
-  });
+  };
 
   const stopSimulation = () => {
     stopwatch.stop();
@@ -40,31 +40,27 @@ const Simulation: React.FunctionComponent = () => {
 
   const continueSimulation = () => {
     stopwatch.start();
-    tick(tickArgs());
+    tick(tickArgs);
   };
 
   const startSimulation = () => {
     stopwatch.start();
     intervalInt.do(clearInterval);
-    let tmpPeople: Person[] = [];
-    for (let i = 0; i < population; i++) {
-      let person: Person = susceptibleCons(i);
-      if (i === 0) {
-        person = infectSusceptible(person);
-      }
-      tmpPeople.push(person);
+    let tmpPeople: Person[] = [infectSusceptible(susceptibleCons(0))];
+    for (let i = 1; i < population; i++) {
+      tmpPeople.push(susceptibleCons(i));
     }
     setPeople(tmpPeople);
     setStartedAt(just(stopwatch.now()));
   };
 
   useEffect(() => {
-    intervalInt = stopwatch.whenStarted().map(() => window.setInterval(() => tick(tickArgs()), 35));
+    intervalInt = stopwatch.whenStarted().map(() => window.setInterval(() => tick(tickArgs), 35));
 
     return () => {
       intervalInt.do(clearInterval);
     };
-  }, [people, range, lasts, hygiene, socialDistancing, startedAt]);
+  }, [tickArgs]);
 
   return (
     <div
