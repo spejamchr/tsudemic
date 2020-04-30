@@ -96,10 +96,10 @@ const Simulation: React.FunctionComponent = () => {
 
         <Data people={people} lasts={lasts} />
       </div>
-      <div style={{ flexGrow: 0.6, minWidth: "300px" }}>
+      <div style={{ flexGrow: 1, minWidth: "300px", maxWidth: "calc(100vh - 84px)" }}>
         <Display people={people} range={range} showRemoved={showRemoved} showPaths={showPaths} />
       </div>
-      <div style={{ flexGrow: 0.3, minWidth: "300px" }}>
+      <div style={{ flexGrow: 1, minWidth: "300px", maxWidth: "calc(50vh - 42px)" }}>
         <Graph people={people} startedAt={startedAt} lasts={lasts} />
       </div>
     </div>
