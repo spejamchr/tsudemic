@@ -18,7 +18,7 @@ const Simulation: React.FunctionComponent = () => {
   const [range, setRange] = useState(15);
   const [lasts, setLasts] = useState(3000);
   const [hygiene, setHygiene] = useState(1);
-  const [socialDistancing, setSocialDistancing] = useState(1);
+  const [socialDistancing, setSocialDistancing] = useState(0);
   const [showRemoved, setShowRemoved] = useState(false);
   const [showPaths, setShowPaths] = useState(false);
 

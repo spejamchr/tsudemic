@@ -81,17 +81,19 @@ const absAngleDiff = (a: number, b: number) =>
   Math.abs(((a - b + Math.PI * 3) % (Math.PI * 2)) - Math.PI);
 
 export const move = (socialDistancing: number) => (person: Person): Person => {
-  if (socialDistancing === 10) {
+  // Scale socialDistancing to be from 1-10, for math (1) and aesthetic (5) reasons.
+  const maxScaled = 5;
+  const scaled = socialDistancing * (maxScaled - 1) + 1;
+
+  if (scaled === maxScaled) {
     return {
       ...person,
-      angle: person.homeAngle,
+      angle: person.angle,
     };
   }
   const angleDiff = absAngleDiff(person.angle, person.homeAngle);
   const speed =
-    angleDiff > (Math.PI * 2) / (socialDistancing + 1)
-      ? person.speed * socialDistancing
-      : person.speed / socialDistancing;
+    angleDiff > (Math.PI * 2) / (scaled + 3) ? person.speed * scaled : person.speed / scaled;
   const angle = (person.angle + speed / person.radius + Math.PI * 2) % (Math.PI * 2);
 
   return {

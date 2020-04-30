@@ -121,9 +121,9 @@ const Controls: React.FunctionComponent<Props> = ({
               value={socialDistancing}
               onChange={parseNumberAnd(setSocialDistancing)}
               aria-labelledby="social-distancing-slider"
-              min={1}
-              max={10}
-              step={0.02}
+              min={0}
+              max={1}
+              step={0.01}
             />
           </Grid>
         </Grid>
