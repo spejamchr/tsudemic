@@ -90,9 +90,9 @@ const Controls: React.FunctionComponent<Props> = ({
         </Grid>
         <Typography id="population-slider" gutterBottom>
           <Info>
-            How many people should be simulated. Increasing this has the effect of increasing
-            population density (higher population in the same simulation area). Changes to this
-            don't take effect until a new simulation starts.
+            How many people should be simulated. Increasing this also increases population density
+            (higher population in the same simulation area). Changes to this don't take effect until
+            a new simulation starts.
           </Info>
           Population Size: {population} people
         </Typography>
@@ -108,7 +108,7 @@ const Controls: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
         <Typography id="hygiene-slider" gutterBottom>
-          <Info>Higher is cleaner. This has the effect of making infection less likely.</Info>
+          <Info>Higher is cleaner. This makes infection less likely.</Info>
           Hygiene: {hygiene}
         </Typography>
         <Grid container spacing={2}>
