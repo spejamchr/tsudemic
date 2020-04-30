@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import React from "react";
+import Info from "../Info";
 
 interface Props {
   lasts: number;
@@ -55,6 +56,7 @@ const Controls: React.FunctionComponent<Props> = ({
     <FormControl component="fieldset" style={{ width: "100%" }}>
       <FormGroup>
         <Typography id="lasts-slider" gutterBottom>
+          <Info>How long the infection lasts, in real time.</Info>
           Infectious Period: {lasts / 1000}s
         </Typography>
         <Grid container spacing={2}>
@@ -70,6 +72,9 @@ const Controls: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
         <Typography id="range-slider" gutterBottom>
+          <Info>
+            How far the infection can travel, represented as colored circles around the infected.
+          </Info>
           Infectious Range: {range}
         </Typography>
         <Grid container spacing={2}>
@@ -84,6 +89,11 @@ const Controls: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
         <Typography id="population-slider" gutterBottom>
+          <Info>
+            How many people should be simulated. Increasing this has the effect of increasing
+            population density (higher population in the same simulation area). Changes to this
+            don't take effect until a new simulation starts.
+          </Info>
           Population Size: {population} people
         </Typography>
         <Grid container spacing={2}>
@@ -98,7 +108,8 @@ const Controls: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
         <Typography id="hygiene-slider" gutterBottom>
-          Hygiene (higher is cleaner): {hygiene}
+          <Info>Higher is cleaner. This has the effect of making infection less likely.</Info>
+          Hygiene: {hygiene}
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs>
@@ -113,6 +124,10 @@ const Controls: React.FunctionComponent<Props> = ({
           </Grid>
         </Grid>
         <Typography id="social-distancing-slider" gutterBottom>
+          <Info>
+            The higher this is, the more time each person spends in a small "home area" of their
+            circular routine. When set all the way to 1, they don't move at all.
+          </Info>
           Social Distancing: {socialDistancing}
         </Typography>
         <Grid container spacing={2}>

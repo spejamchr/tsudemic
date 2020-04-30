@@ -15,9 +15,14 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const Info: React.FunctionComponent = ({ children }) => {
+interface Props {
+  direction?: "top" | "bottom";
+}
+
+const Info: React.FunctionComponent<Props> = ({ children, direction }) => {
   const [anchorEl, setAnchorEl] = React.useState<(EventTarget & HTMLButtonElement) | null>(null);
   const classes = useStyles();
+  direction = direction || "top";
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     setAnchorEl(event.currentTarget);
@@ -42,11 +47,11 @@ const Info: React.FunctionComponent = ({ children }) => {
         anchorEl={anchorEl}
         onClose={handleClose}
         anchorOrigin={{
-          vertical: "top",
+          vertical: direction,
           horizontal: "center",
         }}
         transformOrigin={{
-          vertical: "bottom",
+          vertical: direction === "bottom" ? "top" : "bottom",
           horizontal: "center",
         }}
       >
