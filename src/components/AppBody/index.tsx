@@ -10,7 +10,7 @@ const AppBody: React.FunctionComponent = () => {
         <Toolbar>
           <Info direction="bottom">
             Welcome! This is a simulation of a pandemic. People are modeled as dots that move in
-            circles (because people tend to have repetetive routines), and there are lots of
+            circles (because people tend to have repetitive routines), and there are lots of
             controls to twiddle with. Enjoy the moving dots and graphs!
           </Info>
           <Typography variant="h6">TSudemic</Typography>
